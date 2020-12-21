@@ -1,9 +1,9 @@
-function [VERTEXwing,PANELwing,MIDwing,C4wing] = PANELING(delta,gamma,root,taper,L,M,N,flag)
+function [PANELwing,MIDwing,C4wing,VERTEXwing] = PANELING(delta,gamma,root,taper,L,M,N,flag)
 % this function computes the panlization of the wing
 % it allows delta wings and sweept angled wings
 %
 % INPUT: 
-%   delta  = diedre angle 
+%   delta  = dihedral angle 
 %   gamma  = sweep angle 
 %   root   = root chord
 %   taper  = wing taper ratio
@@ -124,8 +124,8 @@ for j=1:N*M
     X3        = PANEL(j,3,:);
     X4        = PANEL(j,4,:);
     MID(j,:)  = ( (X1 + (X2 - X1)*3/4) + (X4 + (X3 - X4)*3/4) ) / 2;
-    C4(j,1,:) = X1 + (X2 - X1)/4;
-    C4(j,2,:) = X4 + (X3 - X4)/4;
+    C4(j,1,:) = X4 + (X3 - X4)/4;
+    C4(j,2,:) = X1 + (X2 - X1)/4;
 end 
 
 % generating the rest of the wing

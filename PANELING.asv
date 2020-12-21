@@ -3,7 +3,7 @@ function [VERTEXwing,PANELwing,MIDwing,C4wing] = PANELING(delta,gamma,root,taper
 % it allows delta wings and sweept angled wings
 %
 % INPUT: 
-%   delta  = diedre angle 
+%   delta  = dihedral angle 
 %   gamma  = sweep angle 
 %   root   = root chord
 %   taper  = wing taper ratio
@@ -38,9 +38,13 @@ function [VERTEXwing,PANELwing,MIDwing,C4wing] = PANELING(delta,gamma,root,taper
 %
 %        
 
+% converting input in rad
+delta = delta/180*pi;
+gamma = gamma/180*pi;
+
 % allocating extremes 
-ext4 = [0   ,0, 0];
-ext3 = [root,0, 0];
+ext4 = [0   ,0];
+ext3 = [root,0];
 
 ext1 = ext4 + L * [ + sin(gamma), + cos(gamma)];
 ext2 = ext1 + taper * root * [1,0];
@@ -78,11 +82,11 @@ end
 R = ROT(0,0,delta,'rad');
 
 % rotating extremes
-ext1 = R*ext1';
-ext2 = R*ext2';
-ext3 = R*ext3';
-ext4 = R*ext4';
-EXT = [ext4;ext3;ext2;ext1;ext4];
+ext1 = R*[ext1,0]';
+ext2 = R*[ext2,0]';
+ext3 = R*[ext3,0]';
+ext4 = R*[ext4,0]';
+EXT = [ext4';ext3';ext2';ext1';ext4'];
 
 % rotating points wrt the x axes
 for j=1:N+1
