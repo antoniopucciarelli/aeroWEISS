@@ -1,0 +1,25 @@
+function [b] = compute_vector(PANELwing,alpha,beta,N,M)
+% this function compute the known vector of the system
+%
+% INPUT: 
+%   PANELwing : PANEL class array
+%   alpha     : AOA of the wing
+%   beta      : side sli
+%
+%
+%
+
+alpha = 10/180*pi;
+beta  = 0/180*pi;
+
+PANEL = PANELwing;
+
+vel = [cos(alpha),sin(beta),sin(alpha)];
+
+b = ones(N*2*M,1);
+
+for i=1:N*2*M
+    b(i) = PANEL(i).normal' * vel';
+end 
+
+end 

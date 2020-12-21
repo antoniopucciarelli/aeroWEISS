@@ -1,4 +1,4 @@
-%function [] = BS()
+function [MATRIX] = BS(PANEL,M,N,L)
 % this function computes the induced velocity in a point by the panel of
 % unit circulation value with the BIOT SAVART law.
 %
@@ -31,90 +31,52 @@
 %  R1 o beta1
 %
 
-clc
-close all
-clear
- 
-[PANELwing,MIDwing,C4wing,VERTEXwing] = PANELING(2,7,7.5,0.6,25,25,5,"noplot");
+tic
 
-size(PANELwing)
-% 1
-% PANELwing(1,1,:)
-% 2
-% PANELwing(1,2,:)
-% 3
-% PANELwing(1,3,:)
-% 4
-% PANELwing(1,4,:)
+MATRIX = ones(N*2*M,N*2*M);
 
-r_c = [1,1,1]
-L = 25;
+for i=1:N*2*M
+    for j=1:N*2*M
+        
+        % computing C/4 line induction 
+        R0_vec = PANEL(j).C4(2,:)  - PANEL(j).C4(1,:);
+        R1_vec = PANEL(i).MIDPOINT - PANEL(j).C4(1,:);
+        R2_vec = PANEL(i).MIDPOINT - PANEL(j).C4(2,:);
+        R1     = norm(R1_vec);
+        R2     = norm(R2_vec);
+        PR_vec = cross(R1_vec,R2_vec);
+        PR     = norm(PR_vec);
 
-NORM = @(x) sqrt(x(1)^2 + x(2)^2 + x(3)^2);
-DOT  = @(x11,x12,x13,x21,x22,x23) x11*x21 + x12*x22 + x13*x23;
+        Vc_C4  = 1/(4*pi) * R0_vec * dot((R1_vec/R1 - R2_vec/R2),PR_vec/PR^2);
 
-% computing C/4 line induction 
-% setting up variables
-C41(:) = C4wing(1,1,:);
-C42(:) = C4wing(1,2,:);
+        % computing LATERAL2 induced velocity
+        R0_vec  = (PANEL(j).VERTEX(2,:) - PANEL(j).C4(2,:)) * 100 * L;
+        R1_vec  = PANEL(i).MIDPOINT     - PANEL(j).C4(2,:);
+        R2_vec  = PANEL(i).MIDPOINT     - (PANEL(j).C4(2,:) + R0_vec);
+        R1      = norm(R1_vec);
+        R2      = norm(R2_vec);
+        PR_vec  = cross(R1_vec,R2_vec);
+        PR      = norm(PR_vec);
 
-r0_vec(:) = C42 - C41;
-r1_vec(:) = r_c - C41;
-r2_vec(:) = r_c - C42;
-r1        = NORM(r1_vec);
-r2        = NORM(r2_vec);
-pr_vec    = cross(r1_vec,r2_vec);
-pr        = NORM(pr_vec);
+        Vc_inf2 = 1/(4*pi) * R0_vec * dot((R1_vec/R1 - R2_vec/R2),PR_vec/PR^2);
 
-r0_vec
-r1_vec
-r2_vec
-pr_vec
-r1
-r2
-pr
+        % computing LATERAL1 induced velocity
+        R0_vec  = (PANEL(j).VERTEX(3,:) - PANEL(j).C4(1,:)) * 100 * L;
+        R1_vec  = PANEL(i).MIDPOINT     - PANEL(j).C4(1,:);
+        R2_vec  = PANEL(i).MIDPOINT     - (PANEL(j).C4(1,:) + R0_vec);
+        R1      = norm(R1_vec);
+        R2      = norm(R2_vec);
+        PR_vec  = cross(R1_vec,R2_vec);
+        PR      = norm(PR_vec);
 
-A = r1_vec /r1 - r2_vec/r2;
-B = pr_vec/pr^2;
+        Vc_inf1 = 1/(4*pi) * R0_vec * dot((R1_vec/R1 - R2_vec/R2),PR_vec/PR^2);
+    
+    
+        MATRIX(i,j) = dot(Vc_C4 + Vc_inf1 + Vc_inf2,PANEL(i).normal);
+    
+    end 
+end 
 
-A
-B
+toc
 
-C = DOT(A(1),A(2),A(3),B(1),B(2),B(3))
-
-Vc_c4  = 1/(4*pi) * r0_vec * C;
-
-% % computing lateral line induction -- UPPER line from C42 to infinity 
-% X1(:) = PANELwing(1,1,:);
-% X2(:) = PANELwing(1,2,:);
-% X3(:) = PANELwing(1,3,:);
-% X4(:) = PANELwing(1,4,:);
-% 
-% r0_vec(:) = (X2 - X1) * L * 100;
-% r1_vec(:) = r_c - C42;
-% r2_vec(:) = r_c - (C42 + r0_vec);
-% r1        = NORM(r1_vec);
-% r2        = NORM(r2_vec);
-% pr_vec    = cross(r1_vec,r2_vec);
-% pr        = NORM(pr_vec);
-% 
-% Vc_inf2 = 1/(4*pi) * r0_vec * dot((r1_vec/r1 - r2_vec/r2),(pr_vec / pr^2));
-% 
-% % computing lateral line induction -- LOWER line from C41 to infinity
-% r0_vec = (X3 - X4) * L * 100;
-% r1_vec = r_c - C41;
-% r2_vec = r_c - (C41 + r0_vec);
-% r1     = NORM(r1_vec);
-% r2     = NORM(r2_vec);
-% pr_vec = cross(r1_vec,r2_vec);
-% pr     = NORM(pr_vec);
-% 
-% Vc_inf1 = 1/(4*pi) * r0_vec * dot((r1_vec/r1 - r2_vec/r2),(pr_vec / pr^2));
-% 
-% % computing velocity at control point 
-% VC = Vc_c4 + Vc_inf1 + Vc_inf2;
-
-
-
-
-% end
+end
