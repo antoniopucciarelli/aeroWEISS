@@ -1,4 +1,4 @@
-function [L,L_vec] = compute_LIFT(GAMMA,PANELwing,M,N,rho,U)
+function [L,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,M,N,rho,U,S)
 % this function compute the total circulation of the wing 
 %
 % INPUT:
@@ -14,6 +14,8 @@ function [L,L_vec] = compute_LIFT(GAMMA,PANELwing,M,N,rho,U)
 %   L_vec : 3D wing lift distribution spanwise
 %
 
+tic
+
 % initializing values
 L_vec = zeros(2*M,1);
 
@@ -25,6 +27,11 @@ for i=1:2*M
 end 
 
 % summing lift distribution spanwise
-L = sum(L_vec);
+L  = sum(L_vec);
+
+% computing Cl 
+Cl = L/(0.5 * rho * U^2 * S); 
+
+toc
 
 end
