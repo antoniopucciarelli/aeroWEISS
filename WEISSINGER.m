@@ -23,16 +23,16 @@ clc
 clear 
 close all
 
-alpha = 6;
+alpha = 10;
 beta  = 0;
 delta = 0;
-gamma = 0;
+gamma = 10;
 root  = 8;
 L     = 30;
 taper = 1;
 
-M = 7;
-N = 5;
+M = 15;
+N = 7;
 
 flag = "plot";
 
@@ -55,27 +55,29 @@ for i=1:N*2*M
 end 
 
 % computing LIFT
-U         = 1;
-rho       = 1;
-S         = (root + taper*root) * L*cos(gamma);
-[L,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,M,N,rho,U,S);
+U            = 1;
+rho          = 1;
+S            = (root + taper*root) * L*cos(gamma);
+[L,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,M,N,rho,U,S,"yes");
 
-L 
-L_vec
-Cl 
+% computing Cl vs alpha
+coeff_PLOT(MATRIX,PANELwing,beta,M,N,S,linspace(-10,10,100));
 
 % computing induced velocity 
-[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,M,N,U); 
+[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,M,N,U,"yes"); 
 
 % computing DRAG
-[D,D_vec]         = compute_DRAG(L_vec,-alpha_ind,M);
-
-D
-D_vec
+[D,D_vec]         = compute_DRAG(L_vec,-alpha_ind,rho,U,S,M);
 
 Cd = D/(0.5*rho*U^2*S)
+Cl
 
-% computing aerodynamic coefficients
+% v_ind
+% alpha_ind
+% L_vec
+% D_vec
+
+% computing aerodynamic coeffD
 
 
 % doing some tests on different configurations

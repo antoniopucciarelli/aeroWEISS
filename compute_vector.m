@@ -35,7 +35,7 @@ tic
 alpha = alpha/180*pi;
 beta  = beta/180*pi;
 
-vel = [cos(alpha); - sin(beta); sin(alpha)];
+vel = [cos(beta)*cos(alpha); - sin(beta); cos(beta)*sin(alpha)];
 
 b = ones(N*2*M,1);
 

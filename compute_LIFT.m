@@ -1,4 +1,4 @@
-function [L,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,M,N,rho,U,S)
+function [L,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,M,N,rho,U,S,flag)
 % this function compute the total circulation of the wing 
 %
 % INPUT:
@@ -22,7 +22,7 @@ L_vec = zeros(2*M,1);
 for i=1:2*M
     % computing lift distribution spanwise
     for j=1:N
-        L_vec(i) = L_vec(i) + rho * U * GAMMA(i+(j-1)*2*M) * norm(PANELwing(i+(j-1)*2*M).C4(1,:) - PANELwing(i+(j-1)*2*M).C4(2,:));
+        L_vec(i) = L_vec(i) + rho * U * GAMMA(i+(j-1)*M) * norm(PANELwing(i+(j-1)*M).C4(1,:) - PANELwing(i+(j-1)*M).C4(2,:));
     end 
 end 
 
@@ -31,6 +31,28 @@ L  = sum(L_vec);
 
 % computing Cl 
 Cl = L/(0.5 * rho * U^2 * S); 
+
+if(flag == "yes")
+    
+    K = zeros(length(L_vec),1);
+    
+    for i=1:M
+       K(i) = L_vec(M+1-i); 
+    end
+    
+    for i=1:M
+       K(M+i) = L_vec(M+i);
+    end
+    
+    figure
+    x = linspace(-1,1,length(L_vec));
+    plot(x,K,'ok-','LineWidth',2.5);
+    grid on
+    grid minor
+    xlabel('$\% SPAN$','Interpreter','latex');
+    ylabel('$L_{(i)}$','Interpreter','latex');
+    
+end
 
 toc
 

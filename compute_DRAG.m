@@ -1,4 +1,4 @@
-function [D,D_vec] = compute_DRAG(L_vec,alpha_ind,M)
+function [D,D_vec,Cd] = compute_DRAG(L_vec,alpha_ind,rho,U,S,M)
 % This function computes the induced drag of a 3D wing 
 % After have computed the distribution of lift over the wing and the
 % induced velocity/angle, one can compute the variation of the LIFT vector
@@ -33,6 +33,8 @@ for i=1:2*M
 end
 
 D = sum(D_vec);
+
+Cd = D/(0.5 * rho * U^2 * S);
 
 toc
 
