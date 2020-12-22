@@ -12,6 +12,22 @@ function [b] = compute_vector(PANELwing,alpha,beta,M,N)
 %   b         : known vector --> describes the non penetration condition for
 %               the know velocity at infinity
 %
+% PANEL DESCRIPTION BY PANELING FUNCTION 
+%
+%     X1  C42        X2
+%     o---o----------o  
+%     |   |          |
+%     |   |          |
+%     |   |   MID    |
+%     |   |    o     | 
+%     |   |          |    
+%     |   |          |
+%     o---o----------o
+%     X4  C41       X3
+%
+%  | y -- spanwise
+%  |
+%  |_____ x -- chordwise
 %
 
 tic
@@ -19,14 +35,12 @@ tic
 alpha = alpha/180*pi;
 beta  = beta/180*pi;
 
-PANEL = PANELwing;
-
-vel = [cos(alpha),sin(beta),sin(alpha)];
+vel = [cos(alpha); - sin(beta); sin(alpha)];
 
 b = ones(N*2*M,1);
 
 for i=1:N*2*M
-    b(i) = PANEL(i).normal' * vel';
+    b(i) = - PANELwing(i).normal' * vel;
 end 
 
 toc

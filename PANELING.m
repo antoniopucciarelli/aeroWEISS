@@ -85,7 +85,7 @@ ext1 = R*[ext1,0]';
 ext2 = R*[ext2,0]';
 ext3 = R*[ext3,0]';
 ext4 = R*[ext4,0]';
-EXT = [ext4';ext3';ext2';ext1';ext4'];
+EXT  = [ext4';ext3';ext2';ext1';ext4'];
 
 % rotating points wrt the x axes
 for j=1:N+1
@@ -128,12 +128,23 @@ for j=1:N*M
 end 
 
 % generating the rest of the wing
-LEFT_WING        = PANELarray;
+LEFT_WING = PANELarray;
 for i=1:N*M
     LEFT_WING(i).VERTEX(:,2) = - LEFT_WING(i).VERTEX(:,2);
     LEFT_WING(i).MIDPOINT(2) = - LEFT_WING(i).MIDPOINT(2);
     LEFT_WING(i).C4(:,2)     = - LEFT_WING(i).C4(:,2);
     LEFT_WING(i).normal(2)   = - LEFT_WING(i).normal(2);
+    
+    temp                     = LEFT_WING(i).VERTEX(1,:);
+    LEFT_WING(i).VERTEX(1,:) = LEFT_WING(i).VERTEX(4,:);
+    LEFT_WING(i).VERTEX(4,:) = temp;
+    temp                     = LEFT_WING(i).VERTEX(3,:);
+    LEFT_WING(i).VERTEX(3,:) = LEFT_WING(i).VERTEX(2,:);
+    LEFT_WING(i).VERTEX(2,:) = temp;
+    
+    temp                 = LEFT_WING(i).C4(1,:);
+    LEFT_WING(i).C4(1,:) = LEFT_WING(i).C4(2,:);
+    LEFT_WING(i).C4(2,:) = temp;
 end 
 
 % allocating PANELwing
@@ -153,6 +164,9 @@ if(flag == "plot")
               PANELarray(i).VERTEX(:,3),'or','LineWidth',4)
     end 
     axis('equal')
+    xlabel('$x$','Interpreter','latex')
+    ylabel('$y$','Interpreter','latex')
+    zlabel('$z$','Interpreter','latex')
 
     figure(2)
     hold on
@@ -168,13 +182,15 @@ if(flag == "plot")
               PANELwing(j).C4(2,3),'*b', 'LineWidth',3);
     end 
     axis('equal')
+    xlabel('$x$','Interpreter','latex')
+    ylabel('$y$','Interpreter','latex')
+    zlabel('$z$','Interpreter','latex')
 
     figure(3)
     hold on
     for j=1:N*2*M
         PANELwing(j).PANELplot("c","yes");
-    end 
-    
+    end  
     axis('equal')
     xlabel('$x$','Interpreter','latex')
     ylabel('$y$','Interpreter','latex')

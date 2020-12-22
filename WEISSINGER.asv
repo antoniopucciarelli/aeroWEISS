@@ -31,8 +31,8 @@ root  = 8;
 L     = 30;
 taper = 0.7;
 
-M = 7;
-N = 5;
+M = 15;
+N = 25;
 
 flag = "plot";
 
@@ -55,12 +55,13 @@ for i=1:N*2*M
 end 
 
 % computing total circulation
-U         = 1;
-rho       = 1;
-[L,L_vec] = compute_LIFT(GAMMA,PANELwing,M,N,rho,U);
+[L] = compute_LIFT(GAMMA,PANEL,M,N);
 
-% computing induced velocity 
-[v_ind]   = compute_INDUCEDvel(GAMMA,PANELwing,M,N); 
+
+
+
+
+
 
 
 

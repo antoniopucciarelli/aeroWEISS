@@ -85,7 +85,7 @@ ext1 = R*[ext1,0]';
 ext2 = R*[ext2,0]';
 ext3 = R*[ext3,0]';
 ext4 = R*[ext4,0]';
-EXT = [ext4';ext3';ext2';ext1';ext4'];
+EXT  = [ext4';ext3';ext2';ext1';ext4'];
 
 % rotating points wrt the x axes
 for j=1:N+1
@@ -114,6 +114,8 @@ end
 %     --- extreme [2]> [VERTEX_2,VERTEX_3]
 % --- C4 points at the c/4 of the chord
 % --- normal vector
+normal_vec = R*[0;0;1];
+
 for j=1:N*M
     X1                     = PANELarray(j).VERTEX(1,:);
     X2                     = PANELarray(j).VERTEX(2,:);
@@ -121,16 +123,27 @@ for j=1:N*M
     X4                     = PANELarray(j).VERTEX(4,:);
     PANELarray(j).MIDPOINT = ( (X1 + (X2 - X1)*3/4) + (X4 + (X3 - X4)*3/4) ) / 2; 
     PANELarray(j).C4(1,:)  = X4 + (X3 - X4)/4;
-    PANELarray(j).normal   = [cos(delta + pi/2), sin(delta + pi/2)];
+    PANELarray(j).C4(2,:)  = X1 + (X2 - X1)/4;
+    PANELarray(j).normal   = normal_vec;
 end 
 
 % generating the rest of the wing
-LEFT_WING        = PANELarray;
+LEFT_WING = PANELarray;
 for i=1:N*M
     LEFT_WING(i).VERTEX(:,2) = - LEFT_WING(i).VERTEX(:,2);
     LEFT_WING(i).MIDPOINT(2) = - LEFT_WING(i).MIDPOINT(2);
     LEFT_WING(i).C4(:,2)     = - LEFT_WING(i).C4(:,2);
-    LEFT_WING(i).normal      = 
+    LEFT_WING(i).normal(2)   = - LEFT_WING(i).normal(2);
+    
+       disp(obj.VERTEX)
+    temp            = obj.VERTEX(1,:);
+    obj.VERTEX(1,:) = obj.VERTEX(4,:);
+    obj.VERTEX(4,:) = temp;
+    temp            = LE.VERTEX(3,:);
+    LEFT_WING.VERTEX(3,:) = LEFT_WING.VERTEX(2,:);
+    LEFT_WING.VERTEX(2,:) = temp;
+    disp(obj.VERTEX)
+    LEFT_WING(i).swapC4()
 end 
 
 % allocating PANELwing
@@ -150,6 +163,9 @@ if(flag == "plot")
               PANELarray(i).VERTEX(:,3),'or','LineWidth',4)
     end 
     axis('equal')
+    xlabel('$x$','Interpreter','latex')
+    ylabel('$y$','Interpreter','latex')
+    zlabel('$z$','Interpreter','latex')
 
     figure(2)
     hold on
@@ -160,18 +176,20 @@ if(flag == "plot")
         plot3(PANELwing(j).C4(1,1), ...
               PANELwing(j).C4(1,2), ... 
               PANELwing(j).C4(1,3),'*b', 'LineWidth',3);
-        plot3(PANELwing(j).C4(1,1), ...
-              PANELwing(j).C4(1,2), ... 
-              PANELwing(j).C4(1,3),'*b', 'LineWidth',3);
+        plot3(PANELwing(j).C4(2,1), ...
+              PANELwing(j).C4(2,2), ... 
+              PANELwing(j).C4(2,3),'*b', 'LineWidth',3);
     end 
     axis('equal')
+    xlabel('$x$','Interpreter','latex')
+    ylabel('$y$','Interpreter','latex')
+    zlabel('$z$','Interpreter','latex')
 
     figure(3)
     hold on
     for j=1:N*2*M
         PANELwing(j).PANELplot("c","yes");
-    end 
-    
+    end  
     axis('equal')
     xlabel('$x$','Interpreter','latex')
     ylabel('$y$','Interpreter','latex')
