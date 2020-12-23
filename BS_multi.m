@@ -50,10 +50,6 @@ AOA      = AOA/180*pi;
 ROT1     = ROT(0, AOA(1), 0, 'noprint');
 ROT2     = ROT(0, AOA(2), 0, 'noprint');
 
-% R0_vec1  = [1;0;0];
-% R0_vec1  = R * R0_vec1;
-% R0_vec1  = R0_vec1';
-
 for i=1:MATRsize
     for j=1:MATRsize
         

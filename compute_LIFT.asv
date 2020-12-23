@@ -23,11 +23,15 @@ delta  = delta/180*pi;
 
 for i=1:2*M
     % computing lift distribution spanwise
-    for j=1:N  
-       L_vec(i) = L_vec(i) + rho * U * cos(lambda) * GAMMA(i+(j-1)*M) * norm(PANELwing(i+(j-1)*M).C4(1,:) - PANELwing(i+(j-1)*M).C4(2,:));
+    for j=1:N
+        
+        if(i + (j-1)*M)
+       
+       L_vec(i) = L_vec(i) + rho * U * cos(lambda) * cosD * GAMMA(i+(j-1)*M) * norm(PANELwing(i+(j-1)*M).C4(1,:) - PANELwing(i+(j-1)*M).C4(2,:));
+    
     end
 
-    L_VEC(i,:) = L_vec(i) * PANELwing(i).normal;
+    L_VEC(i,:) = L_vec(i) * PANELwing(i).normal
     
 end
 

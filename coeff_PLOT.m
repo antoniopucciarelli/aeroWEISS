@@ -36,7 +36,7 @@ for i=1:length(alpha_vec)
     [~,L_vec,Cl_vec(i)] = compute_LIFT(GAMMA,PANELwing,lambda,delta,M,N,rho,U,S,"no");
     
     % computing induced velocity 
-    [~,alpha_ind]   = compute_INDUCEDvel(GAMMA,PANELwing,M,N,U,"no"); 
+    [~,alpha_ind]   = compute_INDUCEDvel(GAMMA,PANELwing,alpha,M,N,U,"no"); 
 
     % computing DRAG
     [~,~,Cd_vec(i)] = compute_DRAG(L_vec,-alpha_ind,rho,U,S,M);

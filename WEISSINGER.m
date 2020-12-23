@@ -21,9 +21,9 @@
 %
 
 %% computing coefficients from initial conditions
-% clc
-% clear 
-% close all
+clc
+clear 
+close all
 
 tic
 
@@ -31,12 +31,12 @@ tic
 alpha  = 0;
 beta   = 10;
 % GEOMETRIC properties
-delta  = 15;
+delta  = 5;
 lambda = 0;
 root   = 8;
 L      = 30;
 taper  = 1;
-AOA    = -7;
+AOA    = 0;
 
 M = 15;
 N = 7;
@@ -57,6 +57,10 @@ toll        = 1e-4;
 % solve system
 GAMMA       = MATRIX\b;
 
+% plotting spanwise GAMMA distribution 
+plotGAMMA(GAMMA,M,N);
+
+% allocating GAMMA values in PANELwing class array
 for i=1:N*2*M
     PANELwing(i).GAMMA = GAMMA(i);
 end 
@@ -67,14 +71,14 @@ rho          = 1;
 S            = (root + root/taper) * L*cos(lambda/180*pi);
 [~,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,lambda,delta,M,N,rho,U,S,"yes");
 
-% computing Cl and Cd wrt alpha
-coeff_PLOT(MATRIX,PANELwing,beta,lambda,delta,AOA,M,N,S,linspace(-10,10,100),"yes");
-
 % computing induced velocity 
-[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,M,N,U,"yes"); 
+[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,alpha,M,N,U,"yes"); 
 
 % computing DRAG
 [D,D_vec,Cd]      = compute_DRAG(L_vec,-alpha_ind,rho,U,S,M);
+
+% computing Cl and Cd wrt alpha
+%coeff_PLOT(MATRIX,PANELwing,beta,lambda,delta,AOA,M,N,S,linspace(-10,10,100),"yes");
 
 toc
 
@@ -86,20 +90,20 @@ close all
 tic
 
 % varying taper ratio
-beta   = 10;
+beta   = 0;
 delta  = 0;
 lambda = 0;
 root   = 8;
 L      = 30;
 AOA    = 0;
 
-M = 15;
-N = 7;
+M = 25;
+N = 10;
 
 flag = "noplot";
 
 TAPERvec  = 1:1:5;
-alpha_vec = linspace(-5,5,50);
+alpha_vec = linspace(-10,10,30);
 
 figure 
 
@@ -145,8 +149,8 @@ L      = 30;
 taper  = 1;
 AOA    = 0;
 
-M = 15;
-N = 7;
+M = 25;
+N = 10;
 
 flag = "noplot";
 
@@ -154,7 +158,7 @@ subplot(3,1,2)
 hold on
 
 DELTAvec  = 0:1:5;
-alpha_vec = linspace(-5,5,50);
+alpha_vec = linspace(-10,10,30);
 
 for delta = DELTAvec
     
@@ -195,8 +199,8 @@ L      = 30;
 taper  = 1;
 AOA    = 0;
 
-M = 15;
-N = 7;
+M = 25;
+N = 10;
 
 flag = "noplot";
 
@@ -204,7 +208,7 @@ subplot(3,1,3)
 hold on
 
 LAMBDAvec = 0:5:30;
-alpha_vec = linspace(-5,5,50);
+alpha_vec = linspace(-10,10,30);
 
 for lambda = LAMBDAvec
     

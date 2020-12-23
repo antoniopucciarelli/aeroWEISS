@@ -1,16 +1,20 @@
-function [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANEL,M,N,U,flag)
+function [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANEL,alpha,M,N,U,flag)
 % this function computes the induced velocity of a circulation
 % discribution GAMMA over a finite 3D wing described by PANEL
 %
 % INPUT: 
-%   GAMMA : vortex filamente circulation
-%   PANEL : PANEL class array 
-%   M     : # of discretization panels spanwise
-%   N     : # of discretization panels chordwise
+%   GAMMA                 : vortex filamente circulation
+%   PANEL                 : PANEL class array 
+%   flow stream incidence : alpha
+%   dihedral angle        : delta
+%   M                     : # of discretization panels spanwise
+%   N                     : # of discretization panels chordwise
 %
 
 % induced velocity vector
 v_ind = zeros(N*2*M,1);
+
+alpha = alpha/180*pi;
 
 for i=1:2*M*N
     % !!!PAY ATTENTION!!! the contribute of induced velocity is computed 
@@ -35,8 +39,10 @@ for i=1:2*M*N
      
     end 
     
-    k = k + 1;
+    v_ind(i) = dot(v_ind(i)*[0;0;1],PANEL(i).normal); 
     
+    k = k + 1;
+        
 end
 
 % initializing alpha_ind vec
