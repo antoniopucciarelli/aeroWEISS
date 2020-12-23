@@ -26,20 +26,16 @@ for i=1:length(alpha_vec)
     % solve system
     GAMMA       = MATRIX\b;
 
-    for j=1:N*2*M
-        PANELwing(j).GAMMA = GAMMA(j);
-    end 
-
     % computing LIFT
     U                       = 1;
     rho                     = 1;
     [~,L_vec,Cl_vec(i),~,~] = compute_LIFT(GAMMA,PANELwing,lambda,M,N,rho,U,S,"no");
     
     % computing induced velocity 
-    [~,alpha_ind]   = compute_INDUCEDvel(GAMMA,PANELwing,AOA,alpha,M,N,U,"no"); 
+    [~,alpha_ind]   = compute_INDUCEDvel(GAMMA,PANELwing,AOA,M,N,U,"no"); 
 
     % computing DRAG
-    [~,~,Cd_vec(i)] = compute_DRAG(L_vec,-alpha_ind,rho,U,S,M);
+    [~,~,Cd_vec(i)] = compute_DRAG(L_vec,-alpha_ind,alpha,rho,U,S,M);
     
 end 
 

@@ -25,7 +25,6 @@ classdef PANEL
         VERTEX   = zeros(4,3)
         MIDPOINT = zeros(1,3)
         C4       = zeros(2,3)
-        GAMMA    = 0.0
         normal   = zeros(1,3)
         Vc       = 0.0
     end

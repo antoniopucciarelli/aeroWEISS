@@ -30,23 +30,18 @@ for i=1:length(alpha_vec)
 
     % solve system
     GAMMA = MATRIX\b;
-    
-    % allocating circulation in objects
-    for j=1:( N(1)*2*M(1) + N(2)*2*M(2) )
-        PANELwing(j).GAMMA = GAMMA(j);
-    end 
 
     % computing LIFT
     [~,L_vec1,Cl_vec1(i),~,~] = compute_LIFT(GAMMA(1:N(1)*2*M(1)),    PANELwing(1:N(1)*2*M(1)),    lambda(1),M(1),N(1),rho,U,S(1),"no");
     [~,L_vec2,Cl_vec2(i),~,~] = compute_LIFT(GAMMA(N(1)*2*M(1)+1:end),PANELwing(N(1)*2*M(1)+1:end),lambda(2),M(2),N(2),rho,U,S(2),"no");
     
     % computing induced velocity 
-    [~,alpha_ind1]   = compute_INDUCEDvel(GAMMA(1:N(1)*2*M(1)),    PANELwing(1:N(1)*2*M(1)),    AOA(1),alpha,M(1),N(1),U,"no"); 
-    [~,alpha_ind2]   = compute_INDUCEDvel(GAMMA(N(1)*2*M(1)+1:end),PANELwing(N(1)*2*M(1)+1:end),AOA(2),alpha,M(2),N(2),U,"no"); 
+    [~,alpha_ind1]   = compute_INDUCEDvel(GAMMA(1:N(1)*2*M(1)),    PANELwing(1:N(1)*2*M(1)),    AOA(1),M(1),N(1),U,"no"); 
+    [~,alpha_ind2]   = compute_INDUCEDvel(GAMMA(N(1)*2*M(1)+1:end),PANELwing(N(1)*2*M(1)+1:end),AOA(2),M(2),N(2),U,"no"); 
 
     % computing DRAG
-    [~,~,Cd_vec1(i)] = compute_DRAG(L_vec1,-alpha_ind1,rho,U,S(1),M(1));
-    [~,~,Cd_vec2(i)] = compute_DRAG(L_vec2,-alpha_ind2,rho,U,S(2),M(2));
+    [~,~,Cd_vec1(i)] = compute_DRAG(L_vec1,-alpha_ind1,alpha,rho,U,S(1),M(1));
+    [~,~,Cd_vec2(i)] = compute_DRAG(L_vec2,-alpha_ind2,alpha,rho,U,S(2),M(2));
     
 end 
 

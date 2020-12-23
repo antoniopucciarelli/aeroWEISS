@@ -1,4 +1,4 @@
-function [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANEL,AOA,alpha,M,N,U,flag)
+function [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANEL,AOA,M,N,U,flag)
 % this function computes the induced velocity of a circulation
 % discribution GAMMA over a finite 3D wing described by PANEL
 %
@@ -18,9 +18,6 @@ v_ind = zeros(N*2*M,1);
 AOA       = AOA/180*pi;
 ROTnormal = ROT(0,AOA,0);
 normal    = ROTnormal * [0;0;1];
-
-% angle of incidence of flow stream wrt the X-axes
-alpha = alpha/180*pi;
 
 for i=1:2*M*N
     % !!!PAY ATTENTION!!! the contribute of induced velocity is computed 
@@ -60,7 +57,7 @@ for i=1:2*M
         alpha_ind(i) = alpha_ind(i) + v_ind(i+(j-1)*M);
     end
     
-    alpha_ind(i)     = atan(alpha_ind(i)/U) - (alpha + AOA);
+    alpha_ind(i)     = atan(alpha_ind(i)/U);
     
 end 
 

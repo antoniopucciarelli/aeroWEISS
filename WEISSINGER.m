@@ -18,28 +18,34 @@
 %       airflow incidence      -- alpha [deg]
 %       sideslip angle         -- beta  [deg]
 %       U                         = 1   [m/s]
+%       rho                       = 1   [kg/m**3]
 %
 
 %% computing coefficients from initial conditions
-clc
-clear 
 close all
+clear 
+clc
+
+% setting path
+flpath = pwd;
+addpath(append(flpath,'/src/'));
 
 tic
 
 % AERODYNAMIC properties
-alpha  = 5;
-beta   = 0;
+    alpha     = 10;
+    beta      = 0;
 % GEOMETRIC properties
-delta  = 0;
-lambda = 0;
-root   = 8;
-L      = 30;
-taper  = 1;
-AOA    = 0;
-
-M = 5;
-N = 2;
+    delta     = 5;
+    lambda    = 15;
+    root      = 8;
+    L         = 15;
+    taper     = 1;
+    AOA       = 0;
+% DISCRETIZATION properties
+    M         = 7;
+    N         = 3;
+    alpha_vec = linspace(-10,10,30);
 
 flag = "plot";
 
@@ -60,11 +66,6 @@ GAMMA       = MATRIX\b;
 % plotting spanwise GAMMA distribution 
 plotGAMMA(GAMMA,M,N);
 
-% allocating GAMMA values in PANELwing class array
-for i=1:N*2*M
-    PANELwing(i).GAMMA = GAMMA(i);
-end 
-
 % computing LIFT
 U                = 1;
 rho              = 1;
@@ -72,38 +73,49 @@ S                = (root + root/taper) * L*cos(lambda/180*pi);
 [~,L_vec,Cl,~,~] = compute_LIFT(GAMMA,PANELwing,lambda,M,N,rho,U,S,"yes");
 
 % computing induced velocity 
-[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,AOA,alpha,M,N,U,"yes"); 
+[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,AOA,M,N,U,"yes"); 
 
 % computing DRAG
-[D,D_vec,Cd]      = compute_DRAG(L_vec,-alpha_ind,rho,U,S,M);
+[D,D_vec,Cd]      = compute_DRAG(L_vec,-alpha_ind,alpha,rho,U,S,M);
 
 % computing Cl and Cd wrt alpha
-coeff_PLOT(MATRIX,PANELwing,beta,lambda,AOA,M,N,S,linspace(-10,10,100),"yes");
+coeff_PLOT(MATRIX,PANELwing,beta,lambda,AOA,M,N,S,alpha_vec,"yes");
 
 toc
 
+% removing path
+flpath = pwd;
+rmpath(append(flpath,'/src/'));
+
 %% computing coefficients varying wing geometry 
-clc
-clear 
 close all
+clear 
+clc
+
+% setting path
+flpath = pwd;
+addpath(append(flpath,'/src/'));
 
 tic
 
-% varying taper ratio
-beta   = 15;
-delta  = 0;
-lambda = 0;
-root   = 8;
-L      = 30;
-AOA    = 0;
+% TAPER RATIO study
+% GEOMETRY properties
+    delta     = 0;
+    lambda    = 0;
+    root      = 8;
+    L         = 30;
+    AOA       = 0;
+% AERODYNAMIC properties
+    beta      = 30;
+% DISCRETIZATION properties
+    M         = 8;
+    N         = 3;
+    alpha_vec = linspace(-10,10,30);
+% TAPER RATIO discretization properties
+    TAPERvec  = 1:1:5;
 
-M = 8;
-N = 3;
-
+% plotting options
 flag = "noplot";
-
-TAPERvec  = 1:1:5;
-alpha_vec = linspace(-10,10,30);
 
 figure 
 
@@ -142,20 +154,21 @@ title(TEXT,'Interpreter','latex');
 TEXT = "$\Lambda = " + string(TAPERvec) + "$";
 legend(TEXT,'Interpreter','latex');
 
-% varying delta
-lambda = 0;
-root   = 8;
-L      = 30;
-taper  = 1;
-AOA    = 0;
+% DIHEDRAL study
+% GEOMETRY properties
+    lambda    = 0;
+    root      = 8;
+    L         = 30;
+    taper     = 1;
+    AOA       = 0;
+% DIHEDRAL discretization properties
+    DELTAvec  = 0:1:5;
 
+% plotting options
 flag = "noplot";
 
 subplot(3,1,2)
 hold on
-
-DELTAvec  = 0:1:5;
-alpha_vec = linspace(-10,10,30);
 
 for delta = DELTAvec
     
@@ -189,20 +202,20 @@ title(TEXT,'Interpreter','latex');
 TEXT = "$\Delta = " + string(DELTAvec) + "$";
 legend(TEXT,'Interpreter','latex');
 
-% varying lambda
-delta  = 0;
-root   = 8;
-L      = 30;
-taper  = 1;
-AOA    = 0;
+% SWEEP ANGLE study
+    delta     = 0;
+    root      = 8;
+    L         = 30;
+    taper     = 1;
+    AOA       = 0;
+% DISCRETIZATION properties
+    LAMBDAvec = 0:5:30;
 
+% plotting options
 flag = "noplot";
 
 subplot(3,1,3)
 hold on
-
-LAMBDAvec = 0:5:30;
-alpha_vec = linspace(-10,10,30);
 
 for lambda = LAMBDAvec
     
@@ -238,38 +251,47 @@ legend(TEXT,'Interpreter','latex');
 
 toc
 
+% removing path
+flpath = pwd;
+rmpath(append(flpath,'/src/'));
+
 %% wing interactions
 close all
 clear
 clc
 
+% setting path
+flpath = pwd;
+addpath(append(flpath,'/src/'));
+
 tic
 
 % AERODYNAMIC ANGLES
-    alpha   = 0;
-    beta    = 15;
+    alpha     = 0;
+    beta      = 15;
+    alpha_vec = linspace(-10,10,30);
     
 % 1ST WING GEOMETRY
-    delta1  = 15;
-    lambda1 = 30;
-    root1   = 8;
-    L1      = 30;
-    taper1  = 1;
-    AOA1    = 10;
-    transl1 = [0,0,0]; 
-    M1      = 7;
-    N1      = 3;
+    delta1    = 15;
+    lambda1   = 30;
+    root1     = 8;
+    L1        = 30;
+    taper1    = 1;
+    AOA1      = 10;
+    transl1   = [0,0,0]; 
+    M1        = 7;
+    N1        = 3;
     
 % 2ND WING GEOMETRY
-    delta2  = 5;
-    lambda2 = 10;
-    root2   = 4;
-    L2      = 15;
-    taper2  = 1;
-    AOA2    = -10;
-    transl2 = [50,0,0]; 
-    M2      = 5;
-    N2      = 2;
+    delta2    = 5;
+    lambda2   = 10;
+    root2     = 4;
+    L2        = 15;
+    taper2    = 1;
+    AOA2      = -10;
+    transl2   = [50,0,0]; 
+    M2        = 5;
+    N2        = 2;
 
 % toggling plotting
 flag = "plot";
@@ -298,12 +320,24 @@ S1           = (root1 + root1/taper1) * L1*cos(lambda1/180*pi);
 S2           = (root2 + root2/taper2) * L2*cos(lambda2/180*pi);
 
 % computing Cl vs alpha 
-[Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],linspace(-10,10,30),"yes");
+[Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],alpha_vec,"yes");
+
+toc
+
+% removing path
+flpath = pwd;
+rmpath(append(flpath,'/src/'));
 
 %% computing coefficients varying tail AOA
 close all
 clear
 clc
+
+% setting path
+flpath = pwd;
+addpath(append(flpath,'/src/'));
+
+tic
 
 % AERODYNAMIC ANGLES
     alpha     = 0;
@@ -316,10 +350,10 @@ clc
     root1   = 8;
     L1      = 30;
     taper1  = 1;
-    AOA1    = 10;
+    AOA1    = 0;
     transl1 = [0,0,0]; 
-    M1      = 15;
-    N1      = 7;
+    M1      = 7;
+    N1      = 3;
     
 % 2ND WING GEOMETRY
     delta2  = 0;
@@ -329,18 +363,21 @@ clc
     taper2  = 1;
     AOA2vec = -10:5:10;
     transl2 = [25,0,0]; 
-    M2      = 10;
-    N2      = 5;
+    M2      = 5;
+    N2      = 2;
 
 % toggling plotting
 flag = "noplot";
 
 figure 
 
+% the 1st WING isn't inside the for loop because its geometry doesn't vary
+% with the angle of attack of the TAIL
+[PANELwing1] = PANELING(delta1,lambda1,AOA1,root1,taper1,L1,M1,N1,flag,transl1);
+    
 for AOA2 = AOA2vec
    
     % panel creation function 
-    [PANELwing1] = PANELING(delta1,lambda1,AOA1,root1,taper1,L1,M1,N1,flag,transl1);
     [PANELwing2] = PANELING(delta2,lambda2,AOA2,root2,taper2,L2,M2,N2,flag,transl2);
 
     % assemblying MATRIX
@@ -419,3 +456,7 @@ grid on
 grid minor
 
 toc
+
+% removing path
+flpath = pwd;
+rmpath(append(flpath,'/src/'));
