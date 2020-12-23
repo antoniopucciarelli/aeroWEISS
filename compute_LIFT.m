@@ -1,4 +1,4 @@
-function [L,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,lambda,M,N,rho,U,S,flag)
+function [L,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,lambda,delta,M,N,rho,U,S,flag)
 % this function compute the total circulation of the wing 
 %
 % INPUT:
@@ -7,6 +7,7 @@ function [L,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,lambda,M,N,rho,U,S,flag)
 %   M         : # of discretization points in the spanwise direction
 %   N         : # of discretization points in the chordwise direction
 %   lambda    : sweep angle 
+%   delta     : dihedral angle
 %   alpha     : AOA
 %   beta      : sideslip angle
 %
@@ -15,16 +16,15 @@ function [L,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,lambda,M,N,rho,U,S,flag)
 %   L_vec : 3D wing lift distribution spanwise
 %
 
-tic
-
 % initializing values
 L_vec  = zeros(2*M,1);
 lambda = lambda/180*pi;
+delta  = delta/180*pi;
 
 for i=1:2*M
     % computing lift distribution spanwise
     for j=1:N
-        L_vec(i) = L_vec(i) + rho * U * cos(lambda) * GAMMA(i+(j-1)*M) * norm(PANELwing(i+(j-1)*M).C4(1,:) - PANELwing(i+(j-1)*M).C4(2,:));
+        L_vec(i) = L_vec(i) + rho * U * cos(lambda) * cos(delta) * GAMMA(i+(j-1)*M) * norm(PANELwing(i+(j-1)*M).C4(1,:) - PANELwing(i+(j-1)*M).C4(2,:));
     end 
 end 
 
@@ -55,7 +55,5 @@ if(flag == "yes")
     ylabel('$L_{(i)}$','Interpreter','latex');
     
 end
-
-toc
 
 end

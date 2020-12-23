@@ -47,24 +47,6 @@ classdef PANEL
             end 
         end
         
-        function swapVERTEX(obj)
-           disp(obj.VERTEX)
-           temp            = obj.VERTEX(1,:);
-           obj.VERTEX(1,:) = obj.VERTEX(4,:);
-           obj.VERTEX(4,:) = temp;
-           temp            = obj.VERTEX(3,:);
-           obj.VERTEX(3,:) = obj.VERTEX(2,:);
-           obj.VERTEX(2,:) = temp;
-           disp(obj.VERTEX)
-        end
-        
-        function swapC4(obj)
-            disp(obj.C4)
-            temp        = obj.C4(1,:);
-            obj.C4(1,:) = obj.C4(2,:);
-            obj.C4(2,:) = temp;
-            disp(obj.C4)
-        end
     end
 end
 

@@ -23,8 +23,6 @@ function [D,D_vec,Cd] = compute_DRAG(L_vec,alpha_ind,rho,U,S,M)
 %   D_vec     : spanwise ditribution of induced DRAG 
 %
 
-tic
-
 % initializing D_vec
 D_vec = zeros(2*M,1);
 
@@ -35,7 +33,5 @@ end
 D = sum(D_vec);
 
 Cd = D/(0.5 * rho * U^2 * S);
-
-toc
 
 end 

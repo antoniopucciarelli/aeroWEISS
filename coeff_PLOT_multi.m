@@ -1,4 +1,4 @@
-function [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,AOA,lambda,M,N,S,alpha_vec,flag)
+function [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,AOA,lambda,delta,M,N,S,alpha_vec,flag)
 % this function computes the Cl alpha plot of a 3D wing given geometry and
 % flow conditions
 % 
@@ -36,8 +36,8 @@ for i=1:length(alpha_vec)
     end 
 
     % computing LIFT
-    [~,L_vec1,Cl_vec1(i)] = compute_LIFT(GAMMA(1:N(1)*2*M(1)),PANELwing(1:N(1)*2*M(1)),lambda(1),M(1),N(1),rho,U,S(1),"no");
-    [~,L_vec2,Cl_vec2(i)] = compute_LIFT(GAMMA(N(1)*2*M(1)+1:end),PANELwing(N(1)*2*M(1)+1:end),lambda(2),M(2),N(2),rho,U,S(2),"no");
+    [~,L_vec1,Cl_vec1(i)] = compute_LIFT(GAMMA(1:N(1)*2*M(1)),PANELwing(1:N(1)*2*M(1)),lambda(1),delta(1),M(1),N(1),rho,U,S(1),"no");
+    [~,L_vec2,Cl_vec2(i)] = compute_LIFT(GAMMA(N(1)*2*M(1)+1:end),PANELwing(N(1)*2*M(1)+1:end),lambda(2),delta(2),M(2),N(2),rho,U,S(2),"no");
     
     % computing induced velocity 
     [~,alpha_ind1]   = compute_INDUCEDvel(GAMMA(1:N(1)*2*M(1)),PANELwing(1:N(1)*2*M(1)),M(1),N(1),U,"no"); 

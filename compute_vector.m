@@ -30,8 +30,6 @@ function [b] = compute_vector(PANELwing,alpha,beta,M,N)
 %  |_____ x -- chordwise
 %
 
-tic
-
 alpha = alpha/180*pi;
 beta  = beta/180*pi;
 
@@ -42,7 +40,5 @@ b = ones(N*2*M,1);
 for i=1:N*2*M
     b(i) = - PANELwing(i).normal' * vel;
 end 
-
-toc
 
 end 

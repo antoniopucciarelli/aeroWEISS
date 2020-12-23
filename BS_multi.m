@@ -42,8 +42,6 @@ function [MATRIX] = BS_multi(PANEL,AOA,M,N,L,toll)
 %  R1 o beta1
 %
 
-tic
-
 MATRsize = N(1)*2*M(1) + N(2)*2*M(2);
 MATRIX   = ones(MATRsize,MATRsize);
 
@@ -161,7 +159,5 @@ for i=1:MATRsize
     
     end 
 end 
-
-toc
 
 end

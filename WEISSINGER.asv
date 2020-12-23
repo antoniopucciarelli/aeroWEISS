@@ -20,13 +20,18 @@
 %       U                         = 1   [m/s]
 %
 
+%% computing coefficients from initial conditions
 clc
 clear 
 close all
 
+tic
+
+% AERODYNAMIC properties
 alpha  = 0;
 beta   = 0;
-delta  = 0;
+% GEOMETRIC properties
+delta  = 15;
 lambda = 0;
 root   = 8;
 L      = 30;
@@ -60,10 +65,10 @@ end
 U            = 1;
 rho          = 1;
 S            = (root + root/taper) * L*cos(lambda/180*pi);
-[~,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,lambda,M,N,rho,U,S,"yes");
+[~,L_vec,Cl] = compute_LIFT(GAMMA,PANELwing,lambda,delta,M,N,rho,U,S,"yes");
 
 % computing Cl and Cd wrt alpha
-coeff_PLOT(MATRIX,PANELwing,beta,lambda,M,N,S,linspace(-10,10,100),"yes");
+coeff_PLOT(MATRIX,PANELwing,beta,lambda,delta,M,N,S,linspace(-10,10,100),"yes");
 
 % computing induced velocity 
 [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,M,N,U,"yes"); 
@@ -71,10 +76,14 @@ coeff_PLOT(MATRIX,PANELwing,beta,lambda,M,N,S,linspace(-10,10,100),"yes");
 % computing DRAG
 [D,D_vec,Cd]      = compute_DRAG(L_vec,-alpha_ind,rho,U,S,M);
 
+toc
+
 %% computing coefficients varying wing geometry 
 clc
 clear 
 close all
+
+tic
 
 % varying taper ratio
 beta   = 10;
@@ -111,7 +120,7 @@ for taper = TAPERvec
     S               = (root + root/taper) * L*cos(lambda/180*pi);
     
     % compute Cl and Cd wrt alpha
-    [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,M,N,S,alpha_vec,flag);
+    [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,delta,M,N,S,alpha_vec,flag);
     
     % plotting results
     plot(Cd_vec,Cl_vec,'LineWidth',3);
@@ -161,7 +170,7 @@ for delta = DELTAvec
     S               = (root + root/taper) * L*cos(lambda/180*pi);
     
     % compute Cl and Cd wrt alpha
-    [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,M,N,S,alpha_vec,flag);
+    [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,delta,M,N,S,alpha_vec,flag);
     
     % plotting results
     plot(Cd_vec,Cl_vec,'LineWidth',3);
@@ -211,7 +220,7 @@ for lambda = LAMBDAvec
     S               = (root + root/taper) * L*cos(lambda/180*pi);
     
     % compute Cl and Cd wrt alpha
-    [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,M,N,S,alpha_vec,flag);
+    [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,delta,M,N,S,alpha_vec,flag);
     
     % plotting results
     plot(Cd_vec,Cl_vec,'LineWidth',3);
@@ -229,10 +238,14 @@ title(TEXT,'Interpreter','latex');
 TEXT = "$\lambda = " + string(LAMBDAvec) + "$";
 legend(TEXT,'Interpreter','latex');
 
+toc
+
 %% wing interactions
 close all
 clear
 clc
+
+tic
 
 % AERODYNAMIC ANGLES
     alpha   = 0;
@@ -283,7 +296,7 @@ S1           = (root1 + root1/taper1) * L1*cos(lambda1/180*pi);
 S2           = (root2 + root2/taper2) * L2*cos(lambda2/180*pi);
 
 % computing Cl vs alpha 
-[Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],linspace(-10,0,100),"yes");
+[Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[delta1,delta2],[M1,M2],[N1,N2],[S1,S2],linspace(-10,0,100),"yes");
 
 %% computing coefficients varying tail AOA
 close all
@@ -344,7 +357,7 @@ for AOA2 = AOA2vec
     S2           = (root2 + root2/taper2) * L2*cos(lambda2/180*pi);
 
     % computing Cl vs alpha 
-    [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],linspace(-10,0,100),"noplot");
+    [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[delta1,delta2],[M1,M2],[N1,N2],[S1,S2],linspace(-10,0,100),"noplot");
 
     
     subplot(2,2,1)
@@ -402,3 +415,5 @@ ylabel('$C_L$','Interpreter','latex');
 title('TAIL','Interpreter','latex');
 grid on 
 grid minor
+
+toc

@@ -42,8 +42,6 @@ function [MATRIX] = BS(PANEL,AOA,M,N,L,toll)
 %  R1 o beta1
 %
 
-tic
-
 MATRIX = ones(N*2*M,N*2*M);
 
 % rotating the first part of the vortex filament
@@ -152,7 +150,5 @@ for i=1:N*2*M
     
     end 
 end 
-
-toc
 
 end

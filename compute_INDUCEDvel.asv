@@ -1,4 +1,4 @@
-function [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANEL,M,N,U,flag)
+function [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANEL,alpha,M,N,U,flag)
 % this function computes the induced velocity of a circulation
 % discribution GAMMA over a finite 3D wing described by PANEL
 %

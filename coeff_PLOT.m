@@ -1,4 +1,4 @@
-function [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,M,N,S,alpha_vec,flag)
+function [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,delta,AOA,M,N,S,alpha_vec,flag)
 % this function computes the Cl alpha plot of a 3D wing given geometry and
 % flow conditions
 % 
@@ -33,7 +33,7 @@ for i=1:length(alpha_vec)
     % computing LIFT
     U               = 1;
     rho             = 1;
-    [~,L_vec,Cl_vec(i)] = compute_LIFT(GAMMA,PANELwing,lambda,M,N,rho,U,S,"no");
+    [~,L_vec,Cl_vec(i)] = compute_LIFT(GAMMA,PANELwing,lambda,delta,M,N,rho,U,S,"no");
     
     % computing induced velocity 
     [~,alpha_ind]   = compute_INDUCEDvel(GAMMA,PANELwing,M,N,U,"no"); 
@@ -48,7 +48,7 @@ if(flag == "yes")
     figure
 
     subplot(2,1,1)
-    plot(alpha_vec,Cl_vec,'k-','LineWidth',2);
+    plot(AOA + alpha_vec,Cl_vec,'k-','LineWidth',2);
     xlabel('$\alpha$','Interpreter','latex');
     ylabel('$C_L$','Interpreter','latex');
     grid on 

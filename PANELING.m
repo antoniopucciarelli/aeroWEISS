@@ -36,8 +36,6 @@ function [PANELwing] = PANELING(delta,lambda,alpha,root,taper,L,M,N,flag,transl)
 %
 %        
 
-tic
-
 % converting input in rad
 delta  = delta/180*pi;
 lambda = lambda/180*pi;
@@ -210,7 +208,5 @@ if(flag == "plot")
     zlabel('$z$','Interpreter','latex')
     
 end
-
-toc
 
 end

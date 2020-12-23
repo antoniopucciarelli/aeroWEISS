@@ -30,8 +30,6 @@ function [b] = compute_vector_multi(PANELwing,alpha,beta,M,N)
 %  |_____ x -- chordwise
 %
 
-tic
-
 alpha = alpha/180*pi;
 beta  = beta/180*pi;
 
@@ -45,4 +43,4 @@ for i=1:VECsize
     b(i) = - PANELwing(i).normal' * vel;
 end 
 
-toc
+end
