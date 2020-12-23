@@ -163,40 +163,43 @@ end
 
 % plotting process
 if(flag == "plot")
-    
-    figure
-    % extremes
-    plot3(EXT(:,1),EXT(:,2),EXT(:,3),'-ok','LineWidth',3)
-    hold on
-    % internal points
-    for i=1:N*M
-        plot3(PANELarray(i).VERTEX(:,1), ...
-              PANELarray(i).VERTEX(:,2), ...
-              PANELarray(i).VERTEX(:,3),'or','LineWidth',4)
-    end 
-    axis('equal')
-    xlabel('$x$','Interpreter','latex')
-    ylabel('$y$','Interpreter','latex')
-    zlabel('$z$','Interpreter','latex')
 
-    figure(2)
-    hold on
-    for j=1:2*N*M
-        plot3(PANELwing(j).MIDPOINT(1), ... 
-              PANELwing(j).MIDPOINT(2), ... 
-              PANELwing(j).MIDPOINT(3), 'or', 'LineWidth',3);
-        plot3(PANELwing(j).C4(1,1), ...
-              PANELwing(j).C4(1,2), ... 
-              PANELwing(j).C4(1,3),'*b', 'LineWidth',3);
-        plot3(PANELwing(j).C4(2,1), ...
-              PANELwing(j).C4(2,2), ... 
-              PANELwing(j).C4(2,3),'*b', 'LineWidth',3);
-    end 
-    axis('equal')
-    xlabel('$x$','Interpreter','latex')
-    ylabel('$y$','Interpreter','latex')
-    zlabel('$z$','Interpreter','latex')
+%     plotting semiwing sketch --> better use the 3rd plot option    
+%     figure
+%     % extremes
+%     plot3(EXT(:,1),EXT(:,2),EXT(:,3),'-ok','LineWidth',3)
+%     hold on
+%     % internal points
+%     for i=1:N*M
+%         plot3(PANELarray(i).VERTEX(:,1), ...
+%               PANELarray(i).VERTEX(:,2), ...
+%               PANELarray(i).VERTEX(:,3),'or','LineWidth',4)
+%     end 
+%     axis('equal')
+%     xlabel('$x$','Interpreter','latex')
+%     ylabel('$y$','Interpreter','latex')
+%     zlabel('$z$','Interpreter','latex')
 
+%     plotting with dots the main points of the panels :: control points and C/4 points
+%     figure(2)
+%     hold on
+%     for j=1:2*N*M
+%         plot3(PANELwing(j).MIDPOINT(1), ... 
+%               PANELwing(j).MIDPOINT(2), ... 
+%               PANELwing(j).MIDPOINT(3), 'or', 'LineWidth',3);
+%         plot3(PANELwing(j).C4(1,1), ...
+%               PANELwing(j).C4(1,2), ... 
+%               PANELwing(j).C4(1,3),'*b', 'LineWidth',3);
+%         plot3(PANELwing(j).C4(2,1), ...
+%               PANELwing(j).C4(2,2), ... 
+%               PANELwing(j).C4(2,3),'*b', 'LineWidth',3);
+%     end 
+%     axis('equal')
+%     xlabel('$x$','Interpreter','latex')
+%     ylabel('$y$','Interpreter','latex')
+%     zlabel('$z$','Interpreter','latex')
+
+%   plotting normal vector, main points(dotted) and panels  
     figure(3)
     hold on
     for j=1:N*2*M

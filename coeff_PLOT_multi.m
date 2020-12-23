@@ -1,4 +1,4 @@
-function [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,AOA,lambda,delta,M,N,S,alpha_vec,flag)
+function [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,AOA,lambda,M,N,S,alpha_vec,flag)
 % this function computes the Cl alpha plot of a 3D wing given geometry and
 % flow conditions
 % 
@@ -26,22 +26,23 @@ for i=1:length(alpha_vec)
     alpha = alpha_vec(i);
     
     % system known vector 
-    [b]       = compute_vector_multi(PANELwing,alpha,beta,[M(1),M(2)],[N(1),N(2)]);
+    [b]   = compute_vector_multi(PANELwing,alpha,beta,[M(1),M(2)],[N(1),N(2)]);
 
     % solve system
-    GAMMA       = MATRIX\b;
-
+    GAMMA = MATRIX\b;
+    
+    % allocating circulation in objects
     for j=1:( N(1)*2*M(1) + N(2)*2*M(2) )
         PANELwing(j).GAMMA = GAMMA(j);
     end 
 
     % computing LIFT
-    [~,L_vec1,Cl_vec1(i)] = compute_LIFT(GAMMA(1:N(1)*2*M(1)),PANELwing(1:N(1)*2*M(1)),lambda(1),delta(1),M(1),N(1),rho,U,S(1),"no");
-    [~,L_vec2,Cl_vec2(i)] = compute_LIFT(GAMMA(N(1)*2*M(1)+1:end),PANELwing(N(1)*2*M(1)+1:end),lambda(2),delta(2),M(2),N(2),rho,U,S(2),"no");
+    [~,L_vec1,Cl_vec1(i),~,~] = compute_LIFT(GAMMA(1:N(1)*2*M(1)),    PANELwing(1:N(1)*2*M(1)),    lambda(1),M(1),N(1),rho,U,S(1),"no");
+    [~,L_vec2,Cl_vec2(i),~,~] = compute_LIFT(GAMMA(N(1)*2*M(1)+1:end),PANELwing(N(1)*2*M(1)+1:end),lambda(2),M(2),N(2),rho,U,S(2),"no");
     
     % computing induced velocity 
-    [~,alpha_ind1]   = compute_INDUCEDvel(GAMMA(1:N(1)*2*M(1)),PANELwing(1:N(1)*2*M(1)),M(1),N(1),U,"no"); 
-    [~,alpha_ind2]   = compute_INDUCEDvel(GAMMA(N(1)*2*M(1)+1:end),PANELwing(N(1)*2*M(1)+1:end),M(2),N(2),U,"no"); 
+    [~,alpha_ind1]   = compute_INDUCEDvel(GAMMA(1:N(1)*2*M(1)),    PANELwing(1:N(1)*2*M(1)),    AOA(1),alpha,M(1),N(1),U,"no"); 
+    [~,alpha_ind2]   = compute_INDUCEDvel(GAMMA(N(1)*2*M(1)+1:end),PANELwing(N(1)*2*M(1)+1:end),AOA(2),alpha,M(2),N(2),U,"no"); 
 
     % computing DRAG
     [~,~,Cd_vec1(i)] = compute_DRAG(L_vec1,-alpha_ind1,rho,U,S(1),M(1));

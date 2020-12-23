@@ -30,18 +30,6 @@ for i=1:2*M
     D_vec(i) = L_vec(i) * sin(alpha_ind(i));
 end
 
-% for i=1:length(D_vec)
-%     if(D_vec(i)<0)
-%         
-%         D_vec
-%         L_vec
-%         alpha_ind
-%         
-%         %error('error')
-%         
-%     end
-% end
-
 D = sum(D_vec);
 
 Cd = D/(0.5 * rho * U^2 * S);

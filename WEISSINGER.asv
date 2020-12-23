@@ -247,11 +247,11 @@ tic
 
 % AERODYNAMIC ANGLES
     alpha   = 0;
-    beta    = 15;
+    beta    = 0;
     
 % 1ST WING GEOMETRY
-    delta1  = 15;
-    lambda1 = 30;
+    delta1  = 0;
+    lambda1 = 0;
     root1   = 8;
     L1      = 30;
     taper1  = 1;
@@ -262,12 +262,12 @@ tic
     
 % 2ND WING GEOMETRY
     delta2  = 5;
-    lambda2 = 10;
+    lambda2 = 0;
     root2   = 4;
     L2      = 15;
     taper2  = 1;
-    AOA2    = -10;
-    transl2 = [50,0,0]; 
+    AOA2    = 10;
+    transl2 = [25,0,0]; 
     M2      = 5;
     N2      = 2;
 
@@ -298,7 +298,7 @@ S1           = (root1 + root1/taper1) * L1*cos(lambda1/180*pi);
 S2           = (root2 + root2/taper2) * L2*cos(lambda2/180*pi);
 
 % computing Cl vs alpha 
-[Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],linspace(-10,10,30),"yes");
+[Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],linspace(-5,-3,2),"yes");
 
 %% computing coefficients varying tail AOA
 close all
@@ -359,7 +359,7 @@ for AOA2 = AOA2vec
     S2           = (root2 + root2/taper2) * L2*cos(lambda2/180*pi);
 
     % computing Cl vs alpha 
-    [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],alpha_vec,"noplot");
+    [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],linspace(-10,0,100),"noplot");
 
     
     subplot(2,2,1)
