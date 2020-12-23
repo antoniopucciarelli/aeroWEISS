@@ -1,4 +1,4 @@
-function [MATRIX] = BS(PANEL,AOA,M,N,L,toll)
+function [MATRIX] = BS_multi(PANEL,AOA,M,N,L,toll)
 % this function computes the induced velocity in a point by the panel of
 % unit circulation value with the BIOT SAVART law.
 %
@@ -44,17 +44,26 @@ function [MATRIX] = BS(PANEL,AOA,M,N,L,toll)
 
 tic
 
-MATRIX = ones(N*2*M,N*2*M);
+MATRsize = N(1)*2*M(1) + N(2)*2*M(2);
+MATRIX   = ones(MATRsize,MATRsize);
 
 % rotating the first part of the vortex filament
-AOA     = AOA/180*pi;
-R       = ROT(0, AOA, 0, 'noprint');
-R0_vec1 = [1;0;0];
-R0_vec1 = R * R0_vec1;
-R0_vec1 = R0_vec1';
+AOA      = AOA/180*pi;
+ROT1     = ROT(0, AOA(1), 0, 'noprint');
+ROT2     = ROT(0, AOA(2), 0, 'noprint');
 
-for i=1:N*2*M
-    for j=1:N*2*M
+% R0_vec1  = [1;0;0];
+% R0_vec1  = R * R0_vec1;
+% R0_vec1  = R0_vec1';
+
+for i=1:MATRsize
+    for j=1:MATRsize
+        
+        if(i<=N(1)*2*M(1))
+            R0_vec1 = (ROT1 * [1;0;0])';
+        else
+            R0_vec1 = (ROT2 * [1;0;0])';
+        end
         
         % computing C/4 line induction 
         R0_vec = PANEL(j).C4(2,:)  - PANEL(j).C4(1,:);

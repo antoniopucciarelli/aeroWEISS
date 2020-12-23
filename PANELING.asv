@@ -1,4 +1,4 @@
-function [PANELwing] = PANELING(delta,lambda,alpha,root,taper,L,M,N,flag,transl)
+function [PANELwing] = PANELING(delta,lambda,alpha,root,taper,L,M,N,flag,)
 % this function computes the panlization of the wing
 % it allows delta wings and sweept angled wings
 %
@@ -152,21 +152,10 @@ end
 % allocating PANELwing
 PANELwing = [LEFT_WING, PANELarray];
 
-% translation process -- all the wing 
-for i=1:N*2*M
-   PANELwing(i).VERTEX(1,:) = PANELwing(i).VERTEX(1,:) + transl;
-   PANELwing(i).VERTEX(2,:) = PANELwing(i).VERTEX(2,:) + transl;  
-   PANELwing(i).VERTEX(3,:) = PANELwing(i).VERTEX(3,:) + transl;
-   PANELwing(i).VERTEX(4,:) = PANELwing(i).VERTEX(4,:) + transl;
-   PANELwing(i).C4(1,:)     = PANELwing(i).C4(1,:)     + transl;  
-   PANELwing(i).C4(2,:)     = PANELwing(i).C4(2,:)     + transl;
-   PANELwing(i).MIDPOINT    = PANELwing(i).MIDPOINT    + transl;
-end
-
 % plotting process
 if(flag == "plot")
     
-    figure
+    figure(1)
     % extremes
     plot3(EXT(:,1),EXT(:,2),EXT(:,3),'-ok','LineWidth',3)
     hold on

@@ -1,16 +1,9 @@
-function [R,RA,RB,RC,RBI,RCI,RCJ] = ROT(phi, theta, psi, flag, flag1)
+function [R,RA,RB,RC,RBI,RCI,RCJ] = ROT(phi, theta, psi,flag1)
 % this function computes the rotation matrix for EULER angles
 % !!! PAY ATTENTION => IN ORDER TO COMPUTE THE ROTATION MATRIX 
 %     IT IS NECESSARY YOU PUT THE PROIECTION OF THE TRANSFORMED 
 %     VECTORS IN COLUMNS                                   !!!
-
-if(nargin == 4)
-    if(flag == "deg")
-        phi = phi * pi/180;
-        theta = theta * pi/180;
-        psi = psi * pi/180;
-    end
-end
+% INPUT: ANGLES MUST BE IN RADIANTS
 
 
 RA = [  cos(phi), -sin(phi), 0; ...
@@ -30,7 +23,7 @@ RCJ = RB * RC * RB';
 RCI = RA * RCJ * RA'; 
 R   = RA * RB * RC;
 
-if(nargin == 5 && flag1 == "print")
+if(nargin == 4 && flag1 == "print")
 
         I = eye(3);
 
