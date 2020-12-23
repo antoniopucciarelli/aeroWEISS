@@ -1,4 +1,4 @@
-function [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,lambda,M,N,S,alpha_vec)
+function [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,AOA,lambda,M,N,S,alpha_vec,flag)
 % this function computes the Cl alpha plot of a 3D wing given geometry and
 % flow conditions
 % 
@@ -10,6 +10,7 @@ function [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,b
 %   N         : chordwise # of discretization points
 %   S         : wing surface
 %   alpha_vec : set AOA
+%   flag      : toggling plot procedure
 %
 
 % initializing variables
@@ -49,38 +50,41 @@ for i=1:length(alpha_vec)
 end 
 
 % plotting procedure
-figure
+if(flag == "yes")
+    figure
 
-subplot(2,2,1)
-plot(alpha_vec,Cl_vec1,'k-','LineWidth',2);
-xlabel('$\alpha$','Interpreter','latex');
-ylabel('$C_L$','Interpreter','latex');
-title('WING','Interpreter','latex');
-grid on 
-grid minor
+    subplot(2,2,1)
+    plot(AOA(1) + alpha_vec,Cl_vec1,'k-','LineWidth',2);
+    xlabel('$\alpha$','Interpreter','latex');
+    ylabel('$C_L$','Interpreter','latex');
+    title('WING','Interpreter','latex');
+    grid on 
+    grid minor
 
-subplot(2,2,2)
-plot(Cd_vec1,Cl_vec1,'k-','LineWidth',2);
-xlabel('$C_D$','Interpreter','latex');
-ylabel('$C_L$','Interpreter','latex');
-title('WING','Interpreter','latex');
-grid on 
-grid minor
+    subplot(2,2,2)
+    plot(Cd_vec1,Cl_vec1,'k-','LineWidth',2);
+    xlabel('$C_D$','Interpreter','latex');
+    ylabel('$C_L$','Interpreter','latex');
+    title('WING','Interpreter','latex');
+    grid on 
+    grid minor
 
-subplot(2,2,3)
-plot(alpha_vec,Cl_vec2,'k-','LineWidth',2);
-xlabel('$\alpha$','Interpreter','latex');
-ylabel('$C_L$','Interpreter','latex');
-title('TAIL','Interpreter','latex');
-grid on 
-grid minor
+    subplot(2,2,3)
+    plot(AOA(2) + alpha_vec,Cl_vec2,'k-','LineWidth',2);
+    xlabel('$\alpha$','Interpreter','latex');
+    ylabel('$C_L$','Interpreter','latex');
+    title('TAIL','Interpreter','latex');
+    grid on 
+    grid minor
 
-subplot(2,2,4)
-plot(Cd_vec2,Cl_vec2,'k-','LineWidth',2);
-xlabel('$C_D$','Interpreter','latex');
-ylabel('$C_L$','Interpreter','latex');
-title('TAIL','Interpreter','latex');
-grid on 
-grid minor
+    subplot(2,2,4)
+    plot(Cd_vec2,Cl_vec2,'k-','LineWidth',2);
+    xlabel('$C_D$','Interpreter','latex');
+    ylabel('$C_L$','Interpreter','latex');
+    title('TAIL','Interpreter','latex');
+    grid on 
+    grid minor
+
+end 
 
 end

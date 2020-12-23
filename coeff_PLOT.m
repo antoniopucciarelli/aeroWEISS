@@ -1,4 +1,4 @@
-function [Cl_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,M,N,S,alpha_vec)
+function [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,M,N,S,alpha_vec,flag)
 % this function computes the Cl alpha plot of a 3D wing given geometry and
 % flow conditions
 % 
@@ -43,21 +43,22 @@ for i=1:length(alpha_vec)
     
 end 
 
-% plotting procedure
-figure
+if(flag == "yes")
+    % plotting procedure
+    figure
 
-subplot(2,1,1)
-plot(alpha_vec,Cl_vec,'k-','LineWidth',2);
-xlabel('$\alpha$','Interpreter','latex');
-ylabel('$C_L$','Interpreter','latex');
-grid on 
-grid minor
+    subplot(2,1,1)
+    plot(alpha_vec,Cl_vec,'k-','LineWidth',2);
+    xlabel('$\alpha$','Interpreter','latex');
+    ylabel('$C_L$','Interpreter','latex');
+    grid on 
+    grid minor
 
-subplot(2,1,2)
-plot(Cd_vec,Cl_vec,'k-','LineWidth',2);
-xlabel('$C_D$','Interpreter','latex');
-ylabel('$C_L$','Interpreter','latex');
-grid on 
-grid minor
-
+    subplot(2,1,2)
+    plot(Cd_vec,Cl_vec,'k-','LineWidth',2);
+    xlabel('$C_D$','Interpreter','latex');
+    ylabel('$C_L$','Interpreter','latex');
+    grid on 
+    grid minor
+end
 end

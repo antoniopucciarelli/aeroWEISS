@@ -5,8 +5,8 @@ function [b] = compute_vector_multi(PANELwing,alpha,beta,M,N)
 %   PANELwing : PANEL class array            [PANEL class]
 %   alpha     : AOA of the wing              [deg]
 %   beta      : side slip angle of the wing  [deg]
-%   M         : longitudinal discretization
-%   N         : horizontal discretization
+%   M         : longitudinal discretization  [M1,M2]
+%   N         : horizontal discretization    [N1,N2]
 %
 % OUTPUT:
 %   b         : known vector --> describes the non penetration condition for
