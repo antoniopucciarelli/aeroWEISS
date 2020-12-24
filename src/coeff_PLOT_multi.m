@@ -1,4 +1,4 @@
-function [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,AOA,lambda,M,N,S,alpha_vec,flag)
+function [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,AOA,lambda,M,N,S,alpha_vec,flag,num)
 % this function computes the Cl alpha plot of a 3D wing given geometry and
 % flow conditions
 % 
@@ -47,13 +47,20 @@ end
 
 % plotting procedure
 if(flag == "yes")
-    figure
+    if(nargin == 11)
+        figure(num)
+        hold on
+    else
+        figure
+        hold on
+    end
 
     subplot(2,2,1)
     plot(AOA(1) + alpha_vec,Cl_vec1,'k-','LineWidth',2);
     xlabel('$\alpha$','Interpreter','latex');
     ylabel('$C_L$','Interpreter','latex');
     title('WING','Interpreter','latex');
+    hold on
     grid on 
     grid minor
 
@@ -62,6 +69,7 @@ if(flag == "yes")
     xlabel('$C_D$','Interpreter','latex');
     ylabel('$C_L$','Interpreter','latex');
     title('WING','Interpreter','latex');
+    hold on
     grid on 
     grid minor
 
@@ -70,6 +78,7 @@ if(flag == "yes")
     xlabel('$\alpha$','Interpreter','latex');
     ylabel('$C_L$','Interpreter','latex');
     title('TAIL','Interpreter','latex');
+    hold on
     grid on 
     grid minor
 
@@ -78,9 +87,10 @@ if(flag == "yes")
     xlabel('$C_D$','Interpreter','latex');
     ylabel('$C_L$','Interpreter','latex');
     title('TAIL','Interpreter','latex');
+    hold on
     grid on 
     grid minor
-
+    
 end 
 
 end

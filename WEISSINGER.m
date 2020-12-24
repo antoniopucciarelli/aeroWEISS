@@ -33,15 +33,15 @@ addpath(append(flpath,'/src/'));
 tic
 
 % AERODYNAMIC properties
-    alpha     = 10;
+    alpha     = 0;
     beta      = 0;
 % GEOMETRIC properties
     delta     = 5;
-    lambda    = 15;
-    root      = 8;
+    lambda    = 10;
+    root      = 4;
     L         = 15;
     taper     = 1;
-    AOA       = 0;
+    AOA       = 5;
 % DISCRETIZATION properties
     M         = 7;
     N         = 3;
@@ -79,7 +79,7 @@ S                = (root + root/taper) * L*cos(lambda/180*pi);
 [D,D_vec,Cd]      = compute_DRAG(L_vec,-alpha_ind,alpha,rho,U,S,M);
 
 % computing Cl and Cd wrt alpha
-coeff_PLOT(MATRIX,PANELwing,beta,lambda,AOA,M,N,S,alpha_vec,"yes");
+[Cl_vec,Cd_vec]   = coeff_PLOT(MATRIX,PANELwing,beta,lambda,AOA,M,N,S,alpha_vec,"yes");
 
 toc
 
@@ -288,7 +288,7 @@ tic
     root2     = 4;
     L2        = 15;
     taper2    = 1;
-    AOA2      = -10;
+    AOA2      = 5;
     transl2   = [50,0,0]; 
     M2        = 5;
     N2        = 2;
@@ -319,8 +319,61 @@ plotGAMMA(GAMMA(N1*2*M1+1:end),M2,N2);
 S1           = (root1 + root1/taper1) * L1*cos(lambda1/180*pi);
 S2           = (root2 + root2/taper2) * L2*cos(lambda2/180*pi);
 
-% computing Cl vs alpha 
-[Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],alpha_vec,"yes");
+% computing Cl vs alpha and Cl vd Cd
+coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],alpha_vec,"yes",70);
+
+% AERODYNAMIC PROPERTIES FOR UNDISTURBED WINGS
+% WING STUDY %
+    flag = "noplot";
+
+    % panel creation function 
+    [PANELwing]       = PANELING(delta1,lambda1,AOA1,root1,taper1,L1,M1,N1,flag,[0,0,0]);
+
+    % system matrix generation
+    % setting tollerance --> useful to avoid singular MATRIX 
+    toll              = 1e-4;
+    [MATRIX]          = BS(PANELwing,AOA1,M1,N1,L1,toll);
+
+    % computing Cl and Cd wrt alpha --> 1st wing
+    [Cl_vec1,Cd_vec1] = coeff_PLOT(MATRIX,PANELwing,beta,lambda1,AOA1,M1,N1,S1,alpha_vec,"no");
+
+% TAIL STUDY %
+    flag = "noplot";
+
+    % panel creation function 
+    [PANELwing]       = PANELING(delta2,lambda2,AOA2,root2,taper2,L2,M2,N2,flag,[0,0,0]);
+
+    % system matrix generation
+    % setting tollerance --> useful to avoid singular MATRIX 
+    toll              = 1e-4;
+    [MATRIX]          = BS(PANELwing,AOA2,M2,N2,L2,toll);
+
+    % computing Cl and Cd wrt alpha --> 2nd wing
+    [Cl_vec2,Cd_vec2] = coeff_PLOT(MATRIX,PANELwing,beta,lambda2,AOA2,M2,N2,S2,alpha_vec,"no");
+
+% PLOTTING DATA --> this is for comparing the different plots -- [WING+TAIL; WING; TAIL]
+figure(70)
+hold on
+
+subplot(2,2,1)
+hold on
+plot(AOA1+alpha_vec,Cl_vec1,'or','LineWidth',5);
+legend("WING + TAIL","WING ALONE",'location','best')
+
+subplot(2,2,2)
+hold on
+plot(Cd_vec1,Cl_vec1,'or','LineWidth',5);
+legend("WING + TAIL","WING ALONE",'location','best')
+
+subplot(2,2,3)
+hold on
+plot(AOA2+alpha_vec,Cl_vec2,'or','LineWidth',5);
+legend("WING + TAIL","TAIL ALONE",'location','best')
+
+subplot(2,2,4)
+hold on
+plot(Cd_vec2,Cl_vec2,'or','LineWidth',5);
+legend("WING + TAIL","TAIN ALONE",'location','best')
 
 toc
 
@@ -369,7 +422,7 @@ tic
 % toggling plotting
 flag = "noplot";
 
-figure 
+figure(70) 
 
 % the 1st WING isn't inside the for loop because its geometry doesn't vary
 % with the angle of attack of the TAIL
@@ -398,7 +451,6 @@ for AOA2 = AOA2vec
     % computing Cl vs alpha 
     [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],alpha_vec,"noplot");
 
-    
     subplot(2,2,1)
     plot(AOA1 + alpha_vec,Cl_vec1,'LineWidth',3);
     hold on
