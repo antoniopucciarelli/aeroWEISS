@@ -41,7 +41,7 @@ tic
     root      = 4;
     L         = 15;
     taper     = 1;
-    AOA       = 5;
+    AOA       = 0;
 % DISCRETIZATION properties
     M         = 7;
     N         = 3;
@@ -73,7 +73,7 @@ S                = (root + root/taper) * L*cos(lambda/180*pi);
 [~,L_vec,Cl,~,~] = compute_LIFT(GAMMA,PANELwing,lambda,M,N,rho,U,S,"yes");
 
 % computing induced velocity 
-[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,AOA,M,N,U,"yes"); 
+[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,AOA,alpha,M,N,U,"yes"); 
 
 % computing DRAG
 [D,D_vec,Cd]      = compute_DRAG(L_vec,-alpha_ind,alpha,rho,U,S,M);
@@ -104,9 +104,9 @@ tic
     lambda    = 0;
     root      = 8;
     L         = 30;
-    AOA       = 0;
+    AOA       = 10;
 % AERODYNAMIC properties
-    beta      = 30;
+    beta      = 15;
 % DISCRETIZATION properties
     M         = 8;
     N         = 3;
@@ -268,30 +268,30 @@ tic
 
 % AERODYNAMIC ANGLES
     alpha     = 0;
-    beta      = 15;
+    beta      = 0;
     alpha_vec = linspace(-10,10,30);
     
 % 1ST WING GEOMETRY
-    delta1    = 15;
-    lambda1   = 30;
+    delta1    = 0;
+    lambda1   = 0;
     root1     = 8;
     L1        = 30;
     taper1    = 1;
-    AOA1      = 10;
+    AOA1      = 5;
     transl1   = [0,0,0]; 
     M1        = 7;
     N1        = 3;
     
 % 2ND WING GEOMETRY
-    delta2    = 5;
-    lambda2   = 10;
+    delta2    = 0;
+    lambda2   = 0;
     root2     = 4;
-    L2        = 15;
+    L2        = 10;
     taper2    = 1;
     AOA2      = 5;
-    transl2   = [50,0,0]; 
-    M2        = 5;
-    N2        = 2;
+    transl2   = [35,0,0]; 
+    M2        = 7;
+    N2        = 3;
 
 % toggling plotting
 flag = "plot";
@@ -395,7 +395,7 @@ tic
 % AERODYNAMIC ANGLES
     alpha     = 0;
     beta      = 0;
-    alpha_vec = linspace(-10,10,50);
+    alpha_vec = 0;
     
 % 1ST WING GEOMETRY
     delta1  = 0;
@@ -414,7 +414,7 @@ tic
     root2   = 4;
     L2      = 15;
     taper2  = 1;
-    AOA2vec = -10:5:10;
+    AOA2vec = -10:0.2:10;
     transl2 = [25,0,0]; 
     M2      = 5;
     N2      = 2;
@@ -452,47 +452,47 @@ for AOA2 = AOA2vec
     [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA1,AOA2],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],alpha_vec,"noplot");
 
     subplot(2,2,1)
-    plot(AOA1 + alpha_vec,Cl_vec1,'LineWidth',3);
-    hold on
+    plot(AOA1 + alpha_vec,Cl_vec1,'ok','LineWidth',3);
     drawnow
+    hold on
 
     subplot(2,2,2)
-    plot(Cd_vec1,Cl_vec1,'LineWidth',3);
-    hold on
+    plot(Cd_vec1,Cl_vec1,'ok','LineWidth',3);
     drawnow
+    hold on
 
     subplot(2,2,3)
-    plot(AOA2 + alpha_vec,Cl_vec2,'LineWidth',3);
-    hold on
+    plot(AOA2 + alpha_vec,Cl_vec2,'ok','LineWidth',3);
     drawnow
+    hold on
 
     subplot(2,2,4)
-    plot(Cd_vec2,Cl_vec2,'LineWidth',3);
-    hold on
+    plot(Cd_vec2,Cl_vec2,'ok','LineWidth',3);
     drawnow
+    hold on
     
 end
 
 TEXT = "$\alpha_{TAIL} = " + string(AOA2vec) + "$";
 
 subplot(2,2,1)
-legend(TEXT,'Interpreter','latex');
+%legend(TEXT,'Interpreter','latex');
 xlabel('$\alpha$','Interpreter','latex');
 ylabel('$C_L$','Interpreter','latex');
-title('WING','Interpreter','latex');
+title('$WING \Rightarrow \ \alpha_{TAIL}$','Interpreter','latex');
 grid on 
 grid minor
 
 subplot(2,2,2)
-legend(TEXT,'Interpreter','latex');
+%legend(TEXT,'Interpreter','latex');
 xlabel('$C_D$','Interpreter','latex');
 ylabel('$C_L$','Interpreter','latex');
-title('WING','Interpreter','latex');
+title('$WING \Rightarrow \ \alpha_{TAIL}$','Interpreter','latex');
 grid on 
 grid minor
 
 subplot(2,2,3)
-legend(TEXT,'Interpreter','latex');
+%legend(TEXT,'Interpreter','latex');
 xlabel('$\alpha$','Interpreter','latex');
 ylabel('$C_L$','Interpreter','latex');
 title('TAIL','Interpreter','latex');
@@ -500,7 +500,7 @@ grid on
 grid minor
 
 subplot(2,2,4)
-legend(TEXT,'Interpreter','latex');
+%legend(TEXT,'Interpreter','latex');
 xlabel('$C_D$','Interpreter','latex');
 ylabel('$C_L$','Interpreter','latex');
 title('TAIL','Interpreter','latex');
@@ -512,3 +512,120 @@ toc
 % removing path
 flpath = pwd;
 rmpath(append(flpath,'/src/'));
+
+%% computing ground effect
+close all
+clear
+clc
+
+% setting path
+flpath = pwd;
+addpath(append(flpath,'/src/'));
+
+tic
+
+% AERODYNAMIC ANGLES
+    alpha   = 0;
+    beta    = 0;
+    AOA_vec = -1:0.2:1;
+    
+% 1ST WING GEOMETRY
+    delta1  = 0;
+    lambda1 = 0;
+    root1   = 8;
+    L1      = 30;
+    taper1  = 1;
+    AOA1    = 0;
+    transl1 = [0,0,5]; 
+    M1      = 7;
+    N1      = 3;
+    
+% 2ND WING GEOMETRY
+    delta2  = -delta1;
+    lambda2 = lambda1;
+    root2   = root1;
+    L2      = L1;
+    taper2  = taper1;
+    transl2 = - transl1; 
+    M2      = M1;
+    N2      = N1;
+
+% toggling plotting
+flag = "noplot";
+
+for AOA = AOA_vec
+
+    [PANELwing1] = PANELING(delta1,lambda1, AOA,root1,taper1,L1,M1,N1,flag,transl1);
+    [PANELwing2] = PANELING(delta2,lambda2,-AOA,root2,taper2,L2,M2,N2,flag,transl2);
+    
+    % assemblying MATRIX
+    tol          = 1e-4;
+    PANELwing    = [PANELwing1,PANELwing2];
+    [MATRIX]     = BS_multi(PANELwing,[AOA,-AOA],[M1,M2],[N1,N2],transl1(3)*3/4,tol);  
+    
+    % assembling vector 
+    [b]          = compute_vector_multi(PANELwing,alpha,beta,[M1,M2],[N1,N2]);
+    
+    % computing surfaces
+    S1           = (root1 + root1/taper1) * L1*cos(lambda1/180*pi);
+    S2           = (root2 + root2/taper2) * L2*cos(lambda2/180*pi);
+
+    % computing Cl vs alpha 
+    [Cl_vec1,Cd_vec1,Cl_vec2,Cd_vec2] = coeff_PLOT_multi(MATRIX,PANELwing,beta,[AOA,-AOA],[lambda1,lambda2],[M1,M2],[N1,N2],[S1,S2],0,"noplot");
+    
+    figure(70)
+    
+    subplot(2,1,1)
+    GE1 = plot(AOA,Cl_vec1,'ok','LineWidth',3);
+    drawnow
+    hold on
+
+    subplot(2,1,2)
+    GE2 = plot(Cd_vec1,Cl_vec1,'ok','LineWidth',3);
+    drawnow
+    hold on
+
+end
+
+% AERODYNAMIC PROPERTIES FOR UNDISTURBED WINGS
+% WING STUDY %
+    flag = "noplot";
+
+    % panel creation function 
+    [PANELwing]       = PANELING(delta1,lambda1,0,root1,taper1,L1,M1,N1,flag,[0,0,0]);
+
+    % system matrix generation
+    % setting tollerance --> useful to avoid singular MATRIX 
+    toll              = 1e-4;
+    [MATRIX]          = BS(PANELwing,0,M1,N1,L1,toll);
+
+    % computing Cl and Cd wrt alpha --> 1st wing
+    [Cl_vec1,Cd_vec1] = coeff_PLOT(MATRIX,PANELwing,beta,lambda1,0,M1,N1,S1,AOA_vec,"no");
+
+% adding UNDISTURBED WING data    
+subplot(2,1,1)
+hold on
+P1 = plot(AOA_vec,Cl_vec1,'-r','LineWidth',3);
+xlabel('$\alpha$','Interpreter','latex');
+ylabel('$C_L$','Interpreter','latex');
+title('$WING_{real}$','Interpreter','latex');
+legend([GE1,P1],'$GROUND EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
+grid on 
+grid minor
+
+subplot(2,1,2)
+hold on
+P2 = plot(Cd_vec1,Cl_vec1,'-r','LineWidth',3);
+xlabel('$C_D$','Interpreter','latex');
+ylabel('$C_L$','Interpreter','latex');
+title('$WING_{real}$','Interpreter','latex');
+legend([GE2,P2],'$GROUND EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
+grid on 
+grid minor  
+
+toc 
+
+% removing path
+flpath = pwd;
+rmpath(append(flpath,'/src/'));
+    
