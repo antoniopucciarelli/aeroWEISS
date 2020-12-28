@@ -34,14 +34,14 @@ tic
 
 % AERODYNAMIC properties
     alpha     = 0;
-    beta      = 0;
+    beta      = 15;
 % GEOMETRIC properties
     delta     = 5;
     lambda    = 10;
     root      = 4;
     L         = 15;
     taper     = 1;
-    AOA       = 0;
+    AOA       = 10;
 % DISCRETIZATION properties
     M         = 7;
     N         = 3;
@@ -100,8 +100,8 @@ tic
 
 % TAPER RATIO study
 % GEOMETRY properties
-    delta     = 0;
-    lambda    = 0;
+    delta     = 5;
+    lambda    = 5;
     root      = 8;
     L         = 30;
     AOA       = 10;
@@ -268,12 +268,12 @@ tic
 
 % AERODYNAMIC ANGLES
     alpha     = 0;
-    beta      = 0;
+    beta      = 15;
     alpha_vec = linspace(-10,10,30);
     
 % 1ST WING GEOMETRY
-    delta1    = 0;
-    lambda1   = 0;
+    delta1    = 10;
+    lambda1   = 5;
     root1     = 8;
     L1        = 30;
     taper1    = 1;
@@ -283,8 +283,8 @@ tic
     N1        = 3;
     
 % 2ND WING GEOMETRY
-    delta2    = 0;
-    lambda2   = 0;
+    delta2    = 15;
+    lambda2   = 5;
     root2     = 4;
     L2        = 10;
     taper2    = 1;
@@ -527,7 +527,7 @@ tic
 % AERODYNAMIC ANGLES
     alpha   = 0;
     beta    = 0;
-    AOA_vec = -1:0.2:1;
+    AOA_vec = -1:0.05:1;
     
 % 1ST WING GEOMETRY
     delta1  = 0;
@@ -535,7 +535,7 @@ tic
     root1   = 8;
     L1      = 30;
     taper1  = 1;
-    AOA1    = 0;
+    AOA1    = 10;
     transl1 = [0,0,5]; 
     M1      = 7;
     N1      = 3;
@@ -609,7 +609,7 @@ P1 = plot(AOA_vec,Cl_vec1,'-r','LineWidth',3);
 xlabel('$\alpha$','Interpreter','latex');
 ylabel('$C_L$','Interpreter','latex');
 title('$WING_{real}$','Interpreter','latex');
-legend([GE1,P1],'$GROUND EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
+%legend([GE1,P1],'$GROUND \ EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
 grid on 
 grid minor
 
@@ -619,7 +619,7 @@ P2 = plot(Cd_vec1,Cl_vec1,'-r','LineWidth',3);
 xlabel('$C_D$','Interpreter','latex');
 ylabel('$C_L$','Interpreter','latex');
 title('$WING_{real}$','Interpreter','latex');
-legend([GE2,P2],'$GROUND EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
+%legend([GE2,P2],'$GROUND \ EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
 grid on 
 grid minor  
 

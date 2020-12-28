@@ -62,7 +62,7 @@ for i=1:2*M
         alpha_ind(i) = alpha_ind(i) + v_ind(i+(j-1)*M);
     end
   
-    alpha_ind(i)     = atan(alpha_ind(i)/U);
+    alpha_ind(i)     = atan(alpha_ind(i)/U) - (alpha+AOA);
     
 end 
 
