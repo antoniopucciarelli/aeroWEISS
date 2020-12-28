@@ -88,9 +88,9 @@ flpath = pwd;
 rmpath(append(flpath,'/src/'));
 
 %% computing coefficients varying wing geometry 
-close all
-clear 
-clc
+% close all
+% clear 
+% clc
 
 % setting path
 flpath = pwd;
@@ -100,17 +100,17 @@ tic
 
 % TAPER RATIO study
 % GEOMETRY properties
-    delta     = 5;
-    lambda    = 5;
+    delta     = 0;
+    lambda    = 0;
     root      = 8;
     L         = 30;
-    AOA       = 10;
+    AOA       = 0;
 % AERODYNAMIC properties
-    beta      = 15;
+    beta      = 10;
 % DISCRETIZATION properties
     M         = 8;
     N         = 3;
-    alpha_vec = linspace(-10,10,30);
+    alpha_vec = linspace(0,5,30);
 % TAPER RATIO discretization properties
     TAPERvec  = 1:1:5;
 
@@ -149,10 +149,10 @@ grid minor
 
 xlabel('$C_{D}$','Interpreter','latex');
 ylabel('$C_{L}$','Interpreter','latex');
-TEXT = "$\Lambda \ , \ \beta = " + string(beta) + "$"; 
+TEXT = "$\lambda \ , \ \beta = " + string(beta) + "$"; 
 title(TEXT,'Interpreter','latex');
-TEXT = "$\Lambda = " + string(TAPERvec) + "$";
-legend(TEXT,'Interpreter','latex');
+TEXT = "$\lambda = " + string(TAPERvec) + "$";
+legend(TEXT,'Interpreter','latex','location','best');
 
 % DIHEDRAL study
 % GEOMETRY properties
@@ -200,7 +200,7 @@ ylabel('$C_{L}$','Interpreter','latex');
 TEXT = "$\Delta \ , \ \beta = " + string(beta) + "$"; 
 title(TEXT,'Interpreter','latex');
 TEXT = "$\Delta = " + string(DELTAvec) + "$";
-legend(TEXT,'Interpreter','latex');
+legend(TEXT,'Interpreter','latex','location','best');
 
 % SWEEP ANGLE study
     delta     = 0;
@@ -209,7 +209,7 @@ legend(TEXT,'Interpreter','latex');
     taper     = 1;
     AOA       = 0;
 % DISCRETIZATION properties
-    LAMBDAvec = 0:5:30;
+    LAMBDAvec = 0:10:30;
 
 % plotting options
 flag = "noplot";
@@ -244,10 +244,10 @@ grid minor
 
 xlabel('$C_{D}$','Interpreter','latex');
 ylabel('$C_{L}$','Interpreter','latex');
-TEXT = "$\lambda \ , \ \beta = " + string(beta) + "$"; 
+TEXT = "$\Lambda \ , \ \beta = " + string(beta) + "$"; 
 title(TEXT,'Interpreter','latex');
-TEXT = "$\lambda = " + string(LAMBDAvec) + "$";
-legend(TEXT,'Interpreter','latex');
+TEXT = "$\Lambda = " + string(LAMBDAvec) + "$";
+legend(TEXT,'Interpreter','latex','location','best');
 
 toc
 
