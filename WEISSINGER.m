@@ -39,12 +39,12 @@ tic
     delta     = 0;
     lambda    = 0;
     root      = 8;
-    L         = 15;
+    L         = 30;
     taper     = 1;
     AOA       = 0;
 % DISCRETIZATION properties
-    M         = 7;
-    N         = 3;
+    M         = 10;
+    N         = 5;
     alpha_vec = linspace(-10,10,30);
 
 flag = "plot";
@@ -108,8 +108,8 @@ tic
 % AERODYNAMIC properties
     beta      = 0;
 % DISCRETIZATION properties
-    M         = 8;
-    N         = 3;
+    M         = 10;
+    N         = 5;
     alpha_vec = linspace(0,5,30);
 % TAPER RATIO discretization properties
     TAPERvec  = 1:1:5;
@@ -181,7 +181,7 @@ for delta = DELTAvec
     [MATRIX]    = BS(PANELwing,AOA,M,N,L,toll);
     
     % computing surface
-    S               = (root + root/taper) * L*cos(lambda/180*pi);
+    S = (root + root/taper) * L*cos(lambda/180*pi);
     
     % compute Cl and Cd wrt alpha
     [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,AOA,M,N,S,alpha_vec,flag);
@@ -228,7 +228,7 @@ for lambda = LAMBDAvec
     [MATRIX]    = BS(PANELwing,AOA,M,N,L,toll);
     
     % computing surface
-    S               = (root + root/taper) * L*cos(lambda/180*pi);
+    S = (root + root/taper) * L*cos(lambda/180*pi);
     
     % compute Cl and Cd wrt alpha
     [Cl_vec,Cd_vec] = coeff_PLOT(MATRIX,PANELwing,beta,lambda,AOA,M,N,S,alpha_vec,flag);
@@ -236,7 +236,7 @@ for lambda = LAMBDAvec
     % plotting results
     plot(Cd_vec,Cl_vec,'LineWidth',3);
     drawnow
-    
+
 end
 
 grid on

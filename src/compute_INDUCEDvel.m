@@ -44,7 +44,7 @@ for i=1:2*M*N
         v_ind2   = - 1/(4*pi) * GAMMA(j + (N + k)*M) / (PANEL(i).MIDPOINT(2) - PANEL(j + (N + k)*M).C4(1,2));
         
         v_ind(i) = v_ind(i) + (v_ind1 + v_ind2);
-     
+        
     end 
     
     v_ind(i) = dot(v_ind(i)*normal,alpha_normal); 
@@ -62,7 +62,7 @@ for i=1:2*M
         alpha_ind(i) = alpha_ind(i) + v_ind(i+(j-1)*M);
     end
   
-    alpha_ind(i)     = atan(alpha_ind(i)/U) - (alpha+AOA);
+    %alpha_ind(i)     = atan(alpha_ind(i)/U) - (alpha+AOA);
     
 end 
 

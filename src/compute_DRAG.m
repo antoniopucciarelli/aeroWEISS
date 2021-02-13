@@ -28,7 +28,7 @@ D_vec = zeros(2*M,1);
 alpha = alpha/180*pi;
 
 for i=1:2*M
-    D_vec(i) = L_vec(i) * cos(alpha) * sin(alpha_ind(i));
+    D_vec(i) = L_vec(i) * sin(alpha_ind(i)) * cos(alpha);
 end
 
 D = sum(D_vec);
