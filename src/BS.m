@@ -54,6 +54,8 @@ R0_vec1 = R0_vec1';
 for i=1:N*2*M
     for j=1:N*2*M
         
+        % studying PANEL-jth induction on PANEL-ith
+        
         % computing C/4 line induction 
         R0_vec = PANEL(j).C4(2,:)  - PANEL(j).C4(1,:);
         R1_vec = PANEL(i).MIDPOINT - PANEL(j).C4(1,:);

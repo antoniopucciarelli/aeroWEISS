@@ -34,14 +34,14 @@ tic
 
 % AERODYNAMIC properties
     alpha     = 0;
-    beta      = 15;
+    beta      = 0;
 % GEOMETRIC properties
-    delta     = 5;
-    lambda    = 10;
-    root      = 4;
+    delta     = 0;
+    lambda    = 0;
+    root      = 8;
     L         = 15;
     taper     = 1;
-    AOA       = 10;
+    AOA       = 0;
 % DISCRETIZATION properties
     M         = 7;
     N         = 3;
@@ -88,9 +88,9 @@ flpath = pwd;
 rmpath(append(flpath,'/src/'));
 
 %% computing coefficients varying wing geometry 
-% close all
-% clear 
-% clc
+close all
+clear 
+clc
 
 % setting path
 flpath = pwd;
@@ -106,7 +106,7 @@ tic
     L         = 30;
     AOA       = 0;
 % AERODYNAMIC properties
-    beta      = 10;
+    beta      = 0;
 % DISCRETIZATION properties
     M         = 8;
     N         = 3;
@@ -268,7 +268,7 @@ tic
 
 % AERODYNAMIC ANGLES
     alpha     = 0;
-    beta      = 15;
+    beta      = 0;
     alpha_vec = linspace(-10,10,30);
     
 % 1ST WING GEOMETRY
@@ -609,7 +609,7 @@ P1 = plot(AOA_vec,Cl_vec1,'-r','LineWidth',3);
 xlabel('$\alpha$','Interpreter','latex');
 ylabel('$C_L$','Interpreter','latex');
 title('$WING_{real}$','Interpreter','latex');
-%legend([GE1,P1],'$GROUND \ EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
+legend([GE1,P1],'$GROUND \ EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
 grid on 
 grid minor
 
@@ -619,7 +619,7 @@ P2 = plot(Cd_vec1,Cl_vec1,'-r','LineWidth',3);
 xlabel('$C_D$','Interpreter','latex');
 ylabel('$C_L$','Interpreter','latex');
 title('$WING_{real}$','Interpreter','latex');
-%legend([GE2,P2],'$GROUND \ EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
+legend([GE2,P2],'$GROUND \ EFFECT$','$UNDISTURBED$','Interpreter','latex','location','best');
 grid on 
 grid minor  
 
