@@ -20,7 +20,11 @@
 %       U                         = 1   [m/s]
 %       rho                       = 1   [kg/m**3]
 %
-
+%
+% !!! the program gives different Cd results wrt XFLR5. The main problem
+% could hide behind the computation of the induced velocity. The whole
+% procedure follows the aerodynamics' paper on the WEISSINGER method !!!
+%
 %% computing coefficients from initial conditions
 close all
 clear 
