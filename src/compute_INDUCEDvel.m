@@ -1,4 +1,4 @@
-function [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANEL,AOA,alpha,M,N,U,flag)
+function [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANEL,alpha,M,N,U,flag)
 % this function computes the induced velocity of a circulation
 % discribution GAMMA over a finite 3D wing described by PANEL
 %
@@ -9,15 +9,19 @@ function [v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANEL,AOA,alpha,M,N,U,flag
 %   dihedral angle        : delta
 %   M                     : # of discretization panels spanwise
 %   N                     : # of discretization panels chordwise
-%
+% 
+% WING -- schematic (* = panels)
+%             0 >-------------------> M          0 >-------------------> M
+%  0  k = 0   ************************* semiwing ************************* k = 0
+%  |  k = 1   *************************          ************************* k = 1
+%  |  k = ... *************************          ************************* k = ...
+%  |          *************************          *************************
+%  N  k = N   *************************          ************************* k = N
+% 
 
 % induced velocity vector
-v_ind = zeros(N*2*M,1);
-
-% rotation matrix
-AOA       = AOA/180*pi;
-ROTnormal = ROT(0,-(AOA+pi/2),0);
-normal    = ROTnormal * [1;0;0];
+v_ind = zeros(N*2*M,3);
+V     = zeros(N*2*M);
 
 % determining vector normal to alpha --> inclination of the streamflow
 alpha        = alpha/180*pi;
@@ -29,27 +33,36 @@ for i=1:2*M*N
     % only through the lateral filament of each panel that induced a 
     % vertical velocity at the midpoint of the studied panel 
     
-    k = 0;
+    % this check is made for studying the 2 semiwing parts
+    if(i == 1)
+        k = 0;
+    elseif(i == (M*N+1))
+        k = 0;
+    end
     
+    % induced velocity computation
     for j=1:M
         
-        v_ind1   = + 1/(4*pi) * GAMMA(j + k*M) / (PANEL(i).MIDPOINT(2) - PANEL(j + k*M).C4(2,2));
+        v_ind1     = + 1/(4*pi) * GAMMA(j + k*M) / (PANEL(i).MIDPOINT(2) - PANEL(j + k*M).C4(2,2));
         
-        v_ind2   = - 1/(4*pi) * GAMMA(j + k*M) / (PANEL(i).MIDPOINT(2) - PANEL(j + k*M).C4(1,2));
+        v_ind2     = - 1/(4*pi) * GAMMA(j + k*M) / (PANEL(i).MIDPOINT(2) - PANEL(j + k*M).C4(1,2));
         
-        v_ind(i) = v_ind(i) + (v_ind1 + v_ind2);
+        v_ind(i,:) = v_ind(i,:) + (v_ind1 + v_ind2) * PANEL(j + k*M).normal';
         
-        v_ind1   = + 1/(4*pi) * GAMMA(j + (N + k)*M) / (PANEL(i).MIDPOINT(2) - PANEL(j + (N + k)*M).C4(2,2));
+        v_ind1     = + 1/(4*pi) * GAMMA(j + (N + k)*M) / (PANEL(i).MIDPOINT(2) - PANEL(j + (N + k)*M).C4(2,2));
         
-        v_ind2   = - 1/(4*pi) * GAMMA(j + (N + k)*M) / (PANEL(i).MIDPOINT(2) - PANEL(j + (N + k)*M).C4(1,2));
+        v_ind2     = - 1/(4*pi) * GAMMA(j + (N + k)*M) / (PANEL(i).MIDPOINT(2) - PANEL(j + (N + k)*M).C4(1,2));
         
-        v_ind(i) = v_ind(i) + (v_ind1 + v_ind2);
+        v_ind(i,:) = v_ind(i,:) + (v_ind1 + v_ind2) * PANEL(j + (N + k)*M).normal';
         
     end 
     
-    v_ind(i) = dot(v_ind(i)*normal,alpha_normal); 
+    V(i) = dot(v_ind(i,:),alpha_normal); 
     
-    k = k + 1;
+    % if at k is adding 1 ==> means the program is studying the next wing line
+    if(mod(i,M) == 0)
+        k = k + 1;
+    end
         
 end
 
@@ -59,10 +72,11 @@ alpha_ind = zeros(2*M,1);
 for i=1:2*M 
     
     for j=1:N
-        alpha_ind(i) = alpha_ind(i) + v_ind(i+(j-1)*M);
+        alpha_ind(i) = alpha_ind(i) + V(i+(j-1)*M);
     end
   
-    %alpha_ind(i)     = atan(alpha_ind(i)/U) - (alpha+AOA);
+    % computing induced AOA
+    alpha_ind(i) = atan(alpha_ind(i)/U);
     
 end 
 

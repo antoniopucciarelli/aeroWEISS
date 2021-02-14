@@ -20,11 +20,6 @@
 %       U                         = 1   [m/s]
 %       rho                       = 1   [kg/m**3]
 %
-%
-% !!! the program gives different Cd results wrt XFLR5. The main problem
-% could hide behind the computation of the induced velocity. The whole
-% procedure follows the aerodynamics' paper on the WEISSINGER method !!!
-%
 %% computing coefficients from initial conditions
 close all
 clear 
@@ -43,7 +38,7 @@ tic
     delta     = 0;
     lambda    = 0;
     root      = 8;
-    L         = 30;
+    L         = 15;
     taper     = 1;
     AOA       = 0;
 % DISCRETIZATION properties
@@ -77,7 +72,7 @@ S                = (root + root/taper) * L*cos(lambda/180*pi);
 [~,L_vec,Cl,~,~] = compute_LIFT(GAMMA,PANELwing,lambda,M,N,rho,U,S,"yes");
 
 % computing induced velocity 
-[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,AOA,alpha,M,N,U,"yes"); 
+[v_ind,alpha_ind] = compute_INDUCEDvel(GAMMA,PANELwing,alpha,M,N,U,"yes"); 
 
 % computing DRAG
 [D,D_vec,Cd]      = compute_DRAG(L_vec,-alpha_ind,alpha,rho,U,S,M);
